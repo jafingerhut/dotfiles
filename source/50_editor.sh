@@ -1,13 +1,14 @@
 # Editing
 
-if [[ ! "$SSH_TTY" ]] && is_osx; then
-  export EDITOR='mvim'
-  export LESSEDIT='mvim ?lm+%lm -- %f'
-else
-  export EDITOR='vim'
+# On my Macs, I like to use the MacPorts-installed version of Emacs
+# over the version that comes with OS X by default.
+export MACPORTS_EMACS="/opt/local/bin/emacs"
+export EMACS="emacs"
+if [ -f "${MACPORTS_EMACS}" ]; then
+    export EMACS="${MACPORTS_EMACS}"
 fi
 
-export VISUAL="$EDITOR"
-alias q="$EDITOR"
-alias qv="q $DOTFILES/link/.{,g}vimrc +'cd $DOTFILES'"
-alias qs="q $DOTFILES"
+export EDITOR="${EMACS}"
+export VISUAL="${EDITOR}"
+alias e="${EDITOR}"
+alias vi=vim
