@@ -39,17 +39,17 @@ sudo apt-get -qq dist-upgrade
 
 # Install APT packages.
 packages=(
-  ansible
+#  ansible
   build-essential
-  cowsay
+#  cowsay
   git-core
-  htop
-  id3tool
+#  htop
+#  id3tool
   libssl-dev
-  mercurial
-  nmap
+#  mercurial
+#  nmap
   silversearcher-ag
-  sl
+#  sl
   telnet
   tree
 )
