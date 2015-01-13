@@ -42,6 +42,7 @@ packages=(
 #  ansible
   build-essential
 #  cowsay
+  emacs24
   git-core
 #  htop
 #  id3tool
