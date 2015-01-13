@@ -1,5 +1,12 @@
 # History settings
 
+# Keep multiline commands together in history
+shopt -s cmdhist
+shopt -s lithist
+
+shopt -s histappend
+
+
 # Allow use to re-edit a faild history substitution.
 shopt -s histreedit
 # History expansions will be verified before execution.
@@ -16,3 +23,4 @@ export HISTFILESIZE=10000
 
 # Easily re-execute the last history command.
 alias r="fc -s"
+alias h="history"
