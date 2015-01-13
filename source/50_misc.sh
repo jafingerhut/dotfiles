@@ -38,7 +38,7 @@ alias cp='cp -i'
 alias rm='rm -i'
 
 alias ds='dirs -v'
-alias x=exit
+#alias x=exit
 alias du='du -k'
 alias hd='hexdump -C'
 if [ -x /usr/ucb/ps ]
