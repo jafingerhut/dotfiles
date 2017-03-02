@@ -1,6 +1,8 @@
 [user]
   name = Andy Fingerhut
-  email = EMAIL
+  email = andy_fingerhut@alum.wustl.edu
+  #email = andy.fingerhut@gmail.com
+  #email = jafinger@cisco.com
 
 # Comment out lines from Ben Alman's dotfiles version of .gitconfig
 # file, until I learn what they do and whether I want them.
@@ -63,3 +65,5 @@
 #  insteadOf = "gist:"
 #[url "git@heroku.com:"]
 #  insteadOf = "heroku:"
+[push]
+	default = simple
