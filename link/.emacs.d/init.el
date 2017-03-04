@@ -158,6 +158,7 @@
 
 
 (require 'andys-c)
+(require 'andys-p4)
 ;; I haven't used this stuff in a while, but make it easy to enable
 ;(require 'andys-hdls)
 ;(require 'andys-fortran)
