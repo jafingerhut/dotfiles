@@ -48,9 +48,9 @@
 ;; cscope - functions provided by xcscope.el I believe
 
 (global-set-key [f1] 'cscope-find-global-definition)
-(global-set-key [(control f1)] 'cscope-find-this-symbol)
+(global-set-key [(shift f1)] 'cscope-find-this-symbol)
 (global-set-key [f2] 'cscope-find-functions-calling-this-function)
-(global-set-key [(control f2)] 'cscope-find-called-functions)
+(global-set-key [(shift f2)] 'cscope-find-called-functions)
 
 (global-set-key [f3]    'revert-buffer-no-confirm)
 (global-set-key [(shift f3)]    'ediff-buffers)
