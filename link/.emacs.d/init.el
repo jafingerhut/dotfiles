@@ -127,7 +127,7 @@
     (setq default-frame-alist
 	  (append default-frame-alist
 		  ;'((top . 0) (left . -75)
-		  '((top . 0) (left . -50)
+		  '((top . 0) (left . -5)
 		    (width . 80) (height . 64)
 		    ;(font . "9x15")
 		    (font . "8x13")
