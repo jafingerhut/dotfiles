@@ -1,0 +1,84 @@
+#! /bin/sh
+
+if [ `get_os` == "osx" ]
+then
+
+    # This program takes as input the output of the command:
+    #
+    # find <directory> <any other options you like> | xargs ls -sld --time-style=full-iso
+    #
+    # Here is some sample output:
+    #
+    #  0 drwxrwxr-x  40 root  staff   1360 17 Jul 12:19:05 2004 build/lib/MoinMoin/
+    # 72 -rw-rw-r--   1 root  staff  33053  5 Jun 16:58:21 2004 build/lib/MoinMoin/Page.py
+    # 80 -rw-rw-r--   1 root  staff  37766  5 Jun 16:58:36 2004 build/lib/MoinMoin/PageEditor.py
+    #  8 -rw-rw-r--   1 root  staff    191  5 Jun 16:58:16 2004 build/lib/MoinMoin/__init__.py
+    #
+    # The lines of the output are sorted by date, from oldest to newest.
+    #
+    # Field 10 (+9n -10) on the line is the year, and should be sorted numerically (n)
+    # Field 8 (+7M -8) is the month, and should be sorted by month name (M)
+    # Field 7 (+6n -7) is the date, and should be sorted numerically (n)
+    # Field 9 (+8 -9) is the time of day, and sorting alphabetically should work
+    
+    # Here is sample output on my emac as of:
+    #
+    # Thu May 19 08:07:14 PDT 2005
+    #
+    # which is currently running Mac OS X 10.4.1, and has recent fink versions
+    # of find, xargs, ls, etc.
+
+    #    0 drwxr-xr-x   89 staff      3026 May 14 14:51:04 2005 ./
+    #   16 -rwxr-xr-x    1 staff     12292 Feb  3 22:02:56 2005 ./.DS_Store*
+    # 2292 -rw-rw-r--    1 staff   2346045 Jan 31 21:24:00 2001 ./2000-sigcomm-sikka-varghese-mem-efficient-state-lookups-with-fast-updates.ps
+    #    0 drwxrwxr-x    6 staff       204 Sep  9 23:53:58 2004 ./2003 Internet Measurement Conference/
+    #  148 -rw-------    1 staff    147821 Sep  7 00:09:12 2004 ./2003 Internet Measurement Conference/kumar.pdf
+    #  160 -rw-------    1 staff    160390 Sep  7 00:09:38 2004 ./2003 Internet Measurement Conference/lopez2.pdf
+    #  548 -rw-------    1 staff    557844 Sep  7 00:09:11 2004 ./2003 Internet Measurement Conference/p312-kumar1.pdf
+    #  180 -rw-------    1 staff    181892 Sep  7 00:09:33 2004 ./2003 Internet Measurement Conference/p318-golab.pdf
+    #  712 -rw-------    1 staff    725814 Oct  9 08:26:59 2004 ./2004-jun-hierarchical-reliable-multicast.pdf
+    # 2248 -rw-rw-r--    1 staff   2300855 May 24 09:33:46 2004 ./AIM-349.pdf
+
+    # Field 9 on the line is the year, and should be sorted numerically (n)
+    # Field 6 is the month, and should be sorted by month name (M)
+    # Field 7 is the date, and should be sorted numerically (n)
+    # Field 8 is the time of day, and sorting alphabetically should work
+    # Field 10 is the file name, for breaking ties among files with the same date and time
+    
+    SORT=sort
+    #$SORT +9n -10 +7M -8 +6n -7 +8 -9
+    # Sort -k arg takes field numbers where the first field is number 1, not 0
+    $SORT -k 9,9n -k 6,6M -k 7,7n -k 8,8 -k 10
+
+else
+    
+    # This program takes as input the output of the command:
+    #
+    # find <directory> <any other options you like> | xargs ls -sgAFldT
+    #
+    # Here is some sample output:
+    #
+    #   4 -rwxrwxr-x  1 jafinger eng    3468 2001-04-30 12:26:59.000000000 -0700 ./tools/ip_reg/syn/syn.script
+    #   4 drwxrwxr-x  3 jafinger eng    4096 2005-10-14 14:46:45.006611000 -0700 ./tools/samples
+    #   4 drwxrwxr-x  2 jafinger eng    4096 2005-10-12 17:37:26.582653000 -0700 ./tools/samples/CVS
+    #   4 -rw-rw-r--  1 jafinger eng     206 2005-10-12 17:37:26.561632000 -0700 ./tools/samples/CVS/Entries
+    #   0 -rw-rw-r--  1 jafinger eng      35 2005-10-03 16:08:48.910159000 -0700 ./tools/samples/CVS/Repository
+    #   0 -rw-rw-r--  1 jafinger eng      21 2005-10-03 16:08:48.901159000 -0700 ./tools/samples/CVS/Root
+    #   4 -rw-r--r--  1 jafinger eng    2064 2005-10-12 17:21:24.239215000 -0700 ./tools/samples/SampleFunctionBlock.cc
+    #   4 -rw-r--r--  1 jafinger eng    3182 2005-10-12 17:37:26.000000000 -0700 ./tools/samples/SampleFunctionBlock.h
+    #   4 -rw-rw-r--  1 jafinger eng     985 2005-10-03 15:55:40.000000000 -0700 ./tools/samples/SampleUnitTest.hxx
+    #   4 -rw-rw-r--  1 jafinger eng     845 2005-09-28 12:58:03.000000000 -0700 ./tools/samples/template.cc
+    #
+    # The lines of the output are sorted by date, from oldest to newest.
+    #
+
+    # Field 7 (+6 -7) is the yyyy-mm-dd, and should be sorted
+    # alphabetically, which is also numerically because of leading zeros.
+
+    # Field 8 (+7 -8) is HH:MM:SS.fraction, and should be sorted
+    # alphabetically, which is also numerically because of leading zeros.
+
+    SORT=sort
+    $SORT -k 7,7 -k 8,8
+
+fi

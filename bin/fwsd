@@ -1,0 +1,51 @@
+#! /bin/sh
+
+# There has *got* to be a better way to do this.  The reason for the
+# special cases for a certain number of arguments below is because the
+# last 'else' case doesn't work for a command line arg like this:
+
+# fwsd ~/sw -name '*.html'
+
+# If I run that command within a directory that has a file matching
+# the pattern *.html, and it matches the 'else' case below and uses $*
+# to pass along the args, the file names in the current directory are
+# put into the 'find' command line.  If there is only one such file,
+# then the find command only finds that file, which isn't what I want.
+# If there is more than one such file, then 'find' complains about bad
+# command line arguments, which at least makes it obvious that
+# something is wrong.  If there are *no* files matching the pattern in
+# the current directory does the command work as I wish it to.  This
+# is confusing behavior, to say the least.
+
+case `get_os` in
+osx) LS_OPTIONS=-sgAFldT ;;
+*)   LS_OPTIONS="-sld --time-style=full-iso" ;;
+esac
+XARGS_CMD="xargs -0 /bin/ls $LS_OPTIONS"
+
+if [ $# == 0 ]
+then
+    find . -print0 | $XARGS_CMD
+elif [ $# == 1 ]
+then
+    find "$1" -print0 | $XARGS_CMD
+elif [ $# == 2 ]
+then
+    find "$1" "$2" -print0 | $XARGS_CMD
+elif [ $# == 3 ]
+
+then
+    find "$1" "$2" "$3" -print0 | $XARGS_CMD
+elif [ $# == 4 ]
+then
+    find "$1" "$2" "$3" "$4" -print0 | $XARGS_CMD
+elif [ $# == 5 ]
+then
+    find "$1" "$2" "$3" "$4" "$5" -print0 | $XARGS_CMD
+elif [ $# == 6 ]
+then
+    find "$1" "$2" "$3" "$4" "$5" "$6" -print0 | $XARGS_CMD
+else
+    echo "Modify fwsd script to handle $# args"
+    exit 1
+fi
