@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 # There has *got* to be a better way to do this.  The reason for the
 # special cases for a certain number of arguments below is because the
