@@ -1,0 +1,259 @@
+: # use perl -*-Perl-*-
+eval 'exec perl -S "$0" ${1+"$@"}'
+    if 0;
+# -*cperl-*-
+
+use strict;
+use Getopt::Long;
+use File::Basename;
+
+
+#my $debug = 1;
+
+my $verbose = 0;
+my $full_progname = $0;
+my $progname = fileparse($full_progname);
+
+sub usage {
+    print STDERR
+"usage: $progname [ --help ] [ --verbose ]
+            [ -b ] [ dir1 ... ]
+
+        --help  Gives this help message.
+
+        --verbose  Increase the verbosity level.  Can be specified
+            multiple times.
+
+        --between-dirs  Only look for identical files that exist in
+            different directories (or in subdirectories beneath them)
+            given on the command line.
+
+Search the specified directories and all files in subdirectories
+beneath them for files with identical contents, regardless of their
+names.
+
+If no command line options are given, then by default the current
+directory and its subdirectories are searched.
+
+The output can be pretty long, so you may want to save it in a file by
+redirection, e.g.
+
+$progname > duplicates.txt
+
+Output lines are of the form:
+
+<size_in_bytes> file-path-1 file-path-2
+
+Output is sorted from largest files to smallest.
+";
+}
+
+my $help = 0;
+my $between_dirs = 0;
+if (!GetOptions('help' => \$help,
+		'verbose+' => \$verbose,
+		'between-dirs' => \$between_dirs
+		))
+{
+    usage();
+    exit 1;
+}
+if ($help) {
+    usage();
+    exit(0);
+}
+
+my $openssl_loc = exec_loc("openssl");
+my $md5sum_loc = exec_loc("md5sum");
+my $md5_loc = exec_loc("md5");
+
+my $size2fnamelist = {};
+for my $dir (@ARGV) {
+    $size2fnamelist = get_files($dir, $size2fnamelist);
+}
+
+my $already_found_matching_file = {};
+my $num_matches = {};
+my $num_mismatches = {};
+for my $size (sort {$b <=> $a} keys %{$size2fnamelist}) {
+    my $num_files = $#{$size2fnamelist->{$size}}+1;
+#    printf "file size %d bytes: %d files\n", $size, $num_files;
+    if ($num_files == 1) {
+	next;
+    }
+#    printf "%s %d", $fname, $num_files;
+#    $p = sprintf "\n";
+#    $p .= sprintf "=== %d files of size %d bytes ===\n", $num_files, $size;
+
+    # Calculate digital signatures only for files that have at least
+    # one other file with the same size.
+    my $hash2fnamelist = {};
+    if ($num_files <= 3) {
+	for my $file_info (@{$size2fnamelist->{$size}}) {
+	    push @{$hash2fnamelist->{"size" . $size}}, $file_info;
+	}
+    } else {
+	for my $file_info (@{$size2fnamelist->{$size}}) {
+	    my $fname = $file_info->[1];
+	    my $hash = file_hash($fname, $md5sum_loc, $md5_loc);
+#	    printf "%s %s\n", $hash, $fname;
+	    push @{$hash2fnamelist->{$hash}}, $file_info;
+	}
+	#my @hashes = keys %{$hash2fnamelist};
+#	printf "Finished calculating hashes of %d files, resulting in %d unique hashes.\n", $num_files, $#{@hashes} + 1;
+    }
+
+    for my $hash (keys %{$hash2fnamelist}) {
+	for my $file_info1 (@{$hash2fnamelist->{$hash}}) {
+	    my $root_dir1 = $file_info1->[0];
+	    my $full_fname1 = $file_info1->[1];
+	    my ($dir1, $fname1) = split_to_dir_and_fname($full_fname1);
+	    for my $file_info2 (@{$hash2fnamelist->{$hash}}) {
+		my $root_dir2 = $file_info2->[0];
+		my $full_fname2 = $file_info2->[1];
+		my ($dir2, $fname2) = split_to_dir_and_fname($full_fname2);
+		# Don't compare files to themselves, and only compare
+		# two files with each other once.
+		if ($full_fname1 ge $full_fname2) {
+		    next;
+		}
+
+		# Don't compare two files if they were found under the
+		# same root dir given on the command line, and the
+		# --between-dirs options was specified.
+		if ($between_dirs && ($root_dir1 eq $root_dir2)) {
+		    next;
+		}
+		
+		# Don't compare two files if we've already found a match
+		# for the second one at an earlier compare.  This leads to
+		# N*(N-1)/2 lines printed whenever there are N equivalent
+		# files.
+		if ($already_found_matching_file->{$full_fname2}) {
+		    next;
+		}
+		
+		my $cmd_list = [ 'cmp', '-s', $full_fname1, $full_fname2 ];
+#		printf STDERR "Trying cmd: '%s'\n", join(' ', @{$cmd_list});
+		my $exit_status = system @{$cmd_list};
+		# cmp returns exit status 256 if the compared files do no match
+		if ($exit_status == 0) {
+		    printf "%d %s %s\n", $size, $full_fname1, $full_fname2;
+		    ++$num_matches->{$dir1 . "+" . $dir2};
+		    $already_found_matching_file->{$full_fname2} = 1;
+		} elsif ($exit_status == 256) {
+		    # Normal cmp exit status when files are not identical
+		    ++$num_mismatches->{$dir1 . "+" . $dir2};
+		} else {
+		    printf STDERR "'%s' returned exit status %d\n",
+		        join(' ', @{$cmd_list}), $exit_status;
+		}
+	    }
+	}
+    }
+}
+
+exit 0;
+
+
+sub get_files {
+    my $root_dir = shift;
+    my $size2fnamelist = shift;
+
+    my $cmd_list = [ 'find', $root_dir ];
+    open(FILES, '-|', @{$cmd_list})
+	or die "Could not run find process";
+    while (<FILES>) {
+	chop;
+	my ($dir, $fname) = split_to_dir_and_fname($_);
+	if (defined($dir)) {
+	    # Don't bother comparing directories, symbolic links, or
+	    # files with length 0.
+	    if (!((-d $_) || (-l $_) || (-s $_ == 0))) {
+		my $size = -s $_;
+		push @{$size2fnamelist->{$size}}, [ $root_dir, $_ ];
+	    }
+	}
+    }
+    close(FILES);
+    return $size2fnamelist;
+}
+
+
+sub split_to_dir_and_fname {
+    my $full_fname = shift;
+
+    my $dir;
+    my $fname;
+
+    if ($full_fname =~ m-^(.*)/([^/]*)$-) {
+	($dir, $fname) = ($1, $2);
+	return ($dir, $fname);
+    } else {
+	return undef;
+    }
+}
+
+
+sub exec_loc {
+    my $cmdname = shift;
+    my $loc;
+
+    open(WHICH_OUT,"which $cmdname 2>/dev/null |");
+    while (<WHICH_OUT>) {
+	chop;
+	if (-x $_) {
+	    return $_;
+	}
+    }
+    close(WHICH_OUT);
+    return undef;
+}
+
+
+sub file_hash {
+    my $fname = shift;
+    my $md5sum_loc = shift;
+    my $md5_loc = shift;
+
+    my $ret_val;
+
+    my $quick_hash_by_using_beginning_of_file_contents = 1;
+    if ($quick_hash_by_using_beginning_of_file_contents) {
+	open FILE_CONTENTS, "<$fname";
+	read FILE_CONTENTS, $ret_val, 128;
+	close(FILE_CONTENTS);
+	return $ret_val;
+    } elsif (defined($md5sum_loc)) {
+	#open(MD5SUM_OUT,"$md5sum_loc \"$fname\" |");
+	open MD5SUM_OUT, "-|", $md5sum_loc, $fname;
+	while (<MD5SUM_OUT>) {
+	    if (/^\s*([0-9a-fA-F]+)\s+/) {
+		$ret_val = $1;
+	    } else {
+		undef $ret_val;
+	    }
+	}
+	close(MD5SUM_OUT);
+	return $ret_val;
+    } elsif (defined($md5_loc)) {
+	#open(MD5_OUT,"$md5_loc \"$fname\" |");
+	open MD5_OUT, "-|", $md5_loc, $fname;
+	while (<MD5_OUT>) {
+	    if (/\s+([0-9a-fA-F]+)\s*$/) {
+		$ret_val = $1;
+	    } else {
+		undef $ret_val;
+	    }
+	}
+	close(MD5_OUT);
+	return $ret_val;
+    } else {
+	# If no cmd for creating hashes, just return same hash value
+	# for all files.  cmp will find out which ones are really the
+	# same or different.  It will just take longer to do many cmp
+	# runs if there are many files with the same size as each
+	# other.
+	return undef;
+    }
+}
