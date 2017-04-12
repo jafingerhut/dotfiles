@@ -1,0 +1,4 @@
+#! /bin/sh
+
+#echo "Args: $*"
+emacs --eval "(ediff-files \"$1\" \"$2\")"
