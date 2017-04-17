@@ -47,12 +47,14 @@ packages=(
 #  htop
 #  id3tool
   libssl-dev
-#  mercurial
-#  nmap
   silversearcher-ag
-#  sl
+  sshfs
+  synaptic
   telnet
   tree
+  vim
+  xdiskusage
+  xdu
 )
 
 packages=($(setdiff "${packages[*]}" "$(dpkg --get-selections | grep -v deinstall | awk '{print $1}')"))
