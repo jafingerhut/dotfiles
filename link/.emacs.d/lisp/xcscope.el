@@ -731,11 +731,11 @@ for this to work."
 
 
 (defcustom cscope-program
-  ;;"cscope"
+  "cscope"
   ;; for older source trees
   ;; For Gibraltar trees, and probably older ones:
   ;;"/auto/andatcd/cscope/15.4/bin/cscope"
-  "/auto/andatcd/cscope/15.5/bin/cscope"
+  ;;"/auto/andatcd/cscope/15.5/bin/cscope"
   ;;"/auto/andatcd/cscope/15.8b/bin/cscope"
   "*The pathname of the cscope executable to use."
   :type 'string

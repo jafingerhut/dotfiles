@@ -47,6 +47,7 @@ packages=(
 #  htop
 #  id3tool
   libssl-dev
+  mate-terminal
   silversearcher-ag
   sshfs
   synaptic
