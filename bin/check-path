@@ -1,0 +1,46 @@
+#! /usr/bin/env python
+
+from __future__ import print_function
+import os, sys
+import re
+import argparse
+
+def usage():
+    progname = os.path.basename(sys.argv[0])
+    print("usage: %s [-h] [ path ]" % (progname))
+    print("""
+Print out the user's PATH one directory per line.  There are several
+characters that can 'mark' a directory, at the beginning of a line:
+
+  d - This directory is a duplicate of an earlier one in the path.
+  x - This directory does not exist.
+
+If no path is given on the command line, the value of the environment
+variable PATH is used instead.  This command can also be used to
+analyze the values of other path environment variables, e.g.
+
+    %s $MANPATH
+    %s $LD_LIBRARY_PATH
+    """ % (progname, progname))
+
+path = os.environ['PATH']
+if len(sys.argv) > 1:
+    if sys.argv[1] == '-h':
+        usage()
+        sys.exit(0)
+    path = sys.argv[1]
+
+all_dirs = {}
+pos = 0
+for dir in path.split(':'):
+    if os.path.isdir(dir):
+        exists_str = ' '
+    else:
+        exists_str = 'x'
+    if dir in all_dirs:
+        duplicate_str = 'd %2d' % (all_dirs[dir])
+    else:
+        all_dirs[dir] = pos
+        duplicate_str = '    '
+    print('%2d %s %s %s' % (pos, exists_str, duplicate_str, dir))
+    pos += 1
