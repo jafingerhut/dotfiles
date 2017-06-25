@@ -1,0 +1,10 @@
+#! /usr/bin/env runlisp
+
+(format t "Hello, world!~%")
+
+;;(format t "*posix-argv* = ~S~%" *posix-argv*)
+(format t "sb-ext:*posix-argv* = ~S~%" sb-ext:*posix-argv*)
+
+(loop for arg in sb-ext:*posix-argv* as i upfrom 0 do
+	(format t "~&arg[~D] = ~S" i arg))
+(terpri)
