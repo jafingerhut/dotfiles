@@ -9,7 +9,7 @@
 ;;       Bozhidar Batsov <bozhidar@batsov.com>
 ;;       Artur Malabarba <bruce.connor.am@gmail.com>
 ;; URL: http://github.com/clojure-emacs/clojure-mode
-;; Package-Version: 20170527.1442
+;; Package-Version: 20170622.2345
 ;; Keywords: languages clojure clojurescript lisp
 ;; Version: 5.7.0-snapshot
 ;; Package-Requires: ((emacs "24.4"))
@@ -580,14 +580,14 @@ If JUSTIFY is non-nil, justify as well as fill the paragraph."
   (if (clojure-in-docstring-p)
       (let ((paragraph-start
              (concat paragraph-start
-                     "\\|\\s-*\\([(;:\"[]\\|~@\\|`(\\|#'(\\)"))
+                     "\\|\\s-*\\([(:\"[]\\|~@\\|`(\\|#'(\\)"))
             (paragraph-separate
              (concat paragraph-separate "\\|\\s-*\".*[,\\.]$"))
             (fill-column (or clojure-docstring-fill-column fill-column))
             (fill-prefix (clojure-docstring-fill-prefix)))
         (fill-paragraph justify))
     (let ((paragraph-start (concat paragraph-start
-                                   "\\|\\s-*\\([(;:\"[]\\|`(\\|#'(\\)"))
+                                   "\\|\\s-*\\([(:\"[]\\|`(\\|#'(\\)"))
           (paragraph-separate
            (concat paragraph-separate "\\|\\s-*\".*[,\\.[]$")))
       (or (fill-comment-paragraph justify)
@@ -615,15 +615,27 @@ If JUSTIFY is non-nil, justify as well as fill the paragraph."
   "Regexp matching the start of a comment sexp.
 The beginning of match-group 1 should be before the sexp to be
 marked as a comment.  The end of sexp is found with
-`clojure-forward-logical-sexp'.
+`clojure-forward-logical-sexp'.")
 
-By default, this only applies to code after the `#_' reader
-macro.  In order to also font-lock the `(comment ...)' macro as a
-comment, you can set the value to:
-    \"#_ *\\\\(?1:[^ ]\\\\)\\\\|\\\\(?1:(comment\\\\_>\\\\)\"")
+(defvar clojure--reader-and-comment-regexp
+  "#_ *\\(?1:[^ ]\\)\\|\\(?1:(comment\\_>\\)"
+  "Regexp matching both `#_' macro and a comment sexp." )
+
+(defcustom clojure-comment-regexp clojure--comment-macro-regexp
+  "Comment mode.
+
+The possible values for this variable are keywords indicating
+what is considered a comment (affecting font locking).
+
+    - Reader macro `#_' only - the default
+    - Reader macro `#_' and `(comment)'"
+  :type '(choice (const :tag "Reader macro `#_' and `(comment)'" clojure--reader-and-comment-regexp)
+                 (other :tag "Reader macro `#_' only" clojure--comment-macro-regexp))
+  :package-version '(clojure-mode . "5.7.0"))
 
 (defun clojure--search-comment-macro-internal (limit)
-  (when (search-forward-regexp clojure--comment-macro-regexp limit t)
+  "Search for a comment forward stopping at LIMIT."
+  (when (search-forward-regexp clojure-comment-regexp limit t)
     (let* ((md (match-data))
            (start (match-beginning 1))
            (state (syntax-ppss start)))

@@ -1,28 +1,18 @@
-(when (= emacs-major-version 23)
-  ;; This was installed by package-install.el.
-  ;; This provides support for the package system and
-  ;; interfacing with ELPA, the package archive.
-  ;; Move this code earlier if you want to reference
-  ;; packages in your .emacs.
-  (when
-      (load
-       (expand-file-name "~/.emacs.d/elpa/package.el"))
-    (package-initialize)))
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/"))
+(when (< emacs-major-version 24)
+  ;; For important compatibility libraries like cl-lib
+  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+(package-initialize)
 
-(when (= emacs-major-version 24)
-  ;; Emacs 24 with MELPA archive
-  (require 'package)
-  (add-to-list 'package-archives
-	       '("melpa" . "http://melpa.milkbox.net/packages/") t)
-  (package-initialize)
-  ;; To add clojure-mode, nrepl, nrepl-ritz, etc., do M-x
-  ;; package-list-packages, find the package name in the resulting
-  ;; buffer containing a list of packages, go to its line, press 'i'
-  ;; to mark it for installation, then 'x' to execute that
-  ;; installation.  A new buffer should appear, and it is normal for
-  ;; it to have compile warnings.  As long as there are no errors, you
-  ;; should be fine.
-  )
+;; To add clojure-mode, nrepl, nrepl-ritz, etc., do M-x
+;; package-list-packages, find the package name in the resulting
+;; buffer containing a list of packages, go to its line, press 'i'
+;; to mark it for installation, then 'x' to execute that
+;; installation.  A new buffer should appear, and it is normal for
+;; it to have compile warnings.  As long as there are no errors, you
+;; should be fine.
 
 (setq viper-mode t)
 (require 'viper)
