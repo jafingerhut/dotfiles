@@ -158,7 +158,9 @@
 
 
 (require 'andys-c)
-(require 'andys-p4)
+(require 'p4_16-mode)
+(require 'p4_14-mode)
+;(require 'andys-p4)
 ;; I haven't used this stuff in a while, but make it easy to enable
 ;(require 'andys-hdls)
 ;(require 'andys-fortran)
