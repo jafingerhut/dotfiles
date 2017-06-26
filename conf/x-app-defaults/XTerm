@@ -1,0 +1,24 @@
+! The following should be set for _all_ xterm windows on any
+! system that I use.
+XTerm.vt100.jumpScroll: true
+XTerm.vt100.scrollBar:  true
+!XTerm.vt100.rightScrollBar:  true
+XTerm.vt100.saveLines:  5000
+XTerm.vt100.autoWrap:   true
+! What are the following two resources for?
+XTerm*WaitForMap:       true
+XTerm.sunFunctionKeys:  true
+XTerm.vt100.Scrollbar.foreground:      red
+XTerm.vt100.Scrollbar.background:      lightgrey
+XTerm.vt100.pointerColor:              blue
+XTerm.vt100.pointerColorBackground:    white
+
+XTerm.vt100.Foreground: white
+XTerm.vt100.Background: black
+
+XTerm.vt100.geometry:  =80x50
+!XTerm.vt100.geometry:   =120x48
+!XTerm.vt100.font:      9x15
+!XTerm.vt100.font:      8x13bold
+XTerm.vt100.font:      8x13
+!XTerm.vt100.font:      9x15bold
