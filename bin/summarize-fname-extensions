@@ -1,0 +1,56 @@
+#! /usr/bin/env python
+
+from __future__ import print_function
+import os, sys
+import re
+import argparse
+import fileinput
+import collections
+import string
+
+def usage():
+    progname = os.path.basename(sys.argv[0])
+    print("usage: %s [-h]" % (progname))
+    print("""
+Example usage:
+
+    find . \! -type d | %s
+
+Read a list of file names from standard input.  For each file name,
+determine the extension, i.e. the suffix after the last dot (.)
+character in the file name, if any.
+
+Print a table of how many times each extension is found.
+    """ % (progname))
+
+path = os.environ['PATH']
+if len(sys.argv) > 1:
+    if sys.argv[1] == '-h':
+        usage()
+        sys.exit(0)
+    path = sys.argv[1]
+
+
+extension_count = collections.defaultdict(int)
+fnames_with_extension = collections.defaultdict(list)
+nodot = 0
+
+for fname in fileinput.input():
+    fname = fname.rstrip()
+    match = re.search(r"\.([^./]*)$", fname)
+    if match:
+        extension = match.group(1)
+        extension_count[extension] += 1
+        fnames_with_extension[extension].append(fname)
+    else:
+        nodot += 1
+
+if nodot != 0:
+    print('%5u no dot in filename' % (nodot))
+for extension in sorted(extension_count.keys(),
+                        key=lambda ext: extension_count[ext],
+                        reverse=True):
+    fnames = ''
+    if extension_count[extension] <= 2:
+        fnames = ' ' + ' '.join(fnames_with_extension[extension])
+    print("%5u '%s'%s" % (extension_count[extension], extension, fnames))
