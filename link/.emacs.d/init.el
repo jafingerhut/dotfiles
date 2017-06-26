@@ -65,6 +65,19 @@
 (prepend-to-load-path "/usr/local/share/emacs/site-lisp")
 (prepend-to-load-path "~/.emacs.d/lisp")
 
+(let* ((uname-s-output (shell-command-to-string "uname -s")))
+  (defvar osx-p (string-prefix-p "Darwin" uname-s-output))
+  (defvar linux-p (string-prefix-p "Linux" uname-s-output)))
+
+;; While normally I would use (left . -5) to cause the emacs window to
+;; appear a little bit away from the right edge of desktop, when I do
+;; that on a Mac with an external display arranged to the right of the
+;; built-in screen, the emacs window doesn't show up on either screen.
+;; Strange.  765 from the left seems to work well when the
+;; built-in-desktop is set to 2880x1800 resolution, but I would guess
+;; that Xquartz is using larger pixels than that.
+(defvar x-windows-default-frame-left-val (if osx-p 765 -5))
+
 (require 'ido)
 (ido-mode t)
 (require 'xcscope)
@@ -111,18 +124,14 @@
 		    ;;(font . "-*-Courier-normal-r-*-*-15-97-*-*-c-*-*-ansi-")
 		    ;;(font . "-*-Courier-normal-r-*-*-15-50-*-*-c-*-*-ansi-")
 		    (font . "-*-Courier-normal-r-*-*-15-25-*-*-c-*-*-ansi-")
-		    )))
-    )
+		    ))))
    ((eq window-system 'x)
     (setq default-frame-alist
 	  (append default-frame-alist
-		  ;'((top . 0) (left . -75)
-		  '((top . 0) (left . -5)
-		    (width . 80) (height . 64)
-		    ;(font . "9x15")
-		    (font . "8x13")
-		    )))
-    )
+		  (list '(top . 0) (cons 'left x-windows-default-frame-left-val)
+			'(width . 80) '(height . 64)
+			'(font . "8x13")
+			))))
    ((eq window-system 'w32)
 ;    (setq default-frame-alist
 ;         '((top . 0) (left . 350)
@@ -142,8 +151,7 @@
 		    (width . 142) (height . 48)
 		    (font . "-*-CourierNew-normal-r-*-*-12-97-*-*-c-*-*-ansi-")
 		    )))
-    (setq initial-frame-alist '((top . 0) (left . 5)))
-    )
+    (setq initial-frame-alist '((top . 0) (left . 5))))
    )))
 
 
