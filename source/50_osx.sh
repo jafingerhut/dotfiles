@@ -7,14 +7,6 @@ if [ -d /opt/local/bin ]
 then
     export PATH="/opt/local/bin:$(path_remove /opt/local/bin)"
 fi
-if [ -d $HOME/Documents/bin ]
-then
-    export PATH="$HOME/Documents/bin:$(path_remove $HOME/Documents/bin)"
-fi
-if [ -d $HOME/bin ]
-then
-    export PATH="$HOME/bin:$(path_remove $HOME/bin)"
-fi
 
 # Trim new lines and copy to clipboard
 alias c="tr -d '\n' | pbcopy"
