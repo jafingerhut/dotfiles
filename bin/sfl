@@ -18,7 +18,7 @@ then
 
     # This program takes as input the output of the command:
     #
-    # find <directory> <any other options you like> | xargs ls -sld --time-style=full-iso
+    # find <directory> <any other options you like> | xargs ls -sgAFldT
     #
     # Here is some sample output:
     #

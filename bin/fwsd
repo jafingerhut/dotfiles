@@ -46,7 +46,6 @@ elif [ $# == 2 ]
 then
     find "$1" "$2" -print0 | $XARGS_CMD
 elif [ $# == 3 ]
-
 then
     find "$1" "$2" "$3" -print0 | $XARGS_CMD
 elif [ $# == 4 ]
