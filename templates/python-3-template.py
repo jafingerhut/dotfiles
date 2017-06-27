@@ -12,6 +12,20 @@ import re
 #import fileinput
 #import glob
 
+
+# To enable logging in a standalone Python program (as opposed to one
+# that is part of pyATS, which seems to configure the logger by
+# default in its own specific way):
+
+#import logging
+
+# Can replace __name__ with any string you want to appear in the log
+# messages.
+#log = logging.getLogger(__name__)
+#log.setLevel(logging.DEBUG)
+#logging.basicConfig(stream=sys.stdout)
+
+
 #    sys.exit(exit_status)
 
 # Search for regex anywhere within string
@@ -62,8 +76,7 @@ import re
 import argparse
 
 parser = argparse.ArgumentParser(description="""
-TBD: Main documentation for your program here.
-""")
+Text describing what this program does and how to use it.""")
 parser.add_argument('--testbed', dest='testbed', type=topology.loader.load)
 parser.add_argument('--R1', dest='R1', type=str,
                     help="""The name of the device in the testbed
@@ -118,6 +131,8 @@ args = parser.parse_known_args()[0]
                      'minute': int(match.group('minute')),
                      'second': int(match.group('second'))}
 
+
+#for line in fileinput.input(files=['infile1', 'infile2']):
 
 for line in fileinput.input():
     # do something to line here
