@@ -85,6 +85,12 @@ for my $size (sort {$b <=> $a} keys %{$size2fnamelist}) {
 #    $p = sprintf "\n";
 #    $p .= sprintf "=== %d files of size %d bytes ===\n", $num_files, $size;
 
+    if (($verbose >= 2) && ($size >= 100000)) {
+	printf STDERR "Found %d files with size %d bytes:\n", $num_files, $size;
+	foreach my $finfo (@{$size2fnamelist->{$size}}) {
+	    printf STDERR "    %s\n", $finfo->[1];
+	}
+    }
     # Calculate digital signatures only for files that have at least
     # one other file with the same size.
     my $hash2fnamelist = {};
@@ -160,10 +166,11 @@ sub get_files {
     my $root_dir = shift;
     my $size2fnamelist = shift;
 
+    my $fh;
     my $cmd_list = [ 'find', $root_dir ];
-    open(FILES, '-|', @{$cmd_list})
+    open($fh, '-|', @{$cmd_list})
 	or die "Could not run find process";
-    while (<FILES>) {
+    while (<$fh>) {
 	chop;
 	my ($dir, $fname) = split_to_dir_and_fname($_);
 	if (defined($dir)) {
@@ -175,7 +182,7 @@ sub get_files {
 	    }
 	}
     }
-    close(FILES);
+    close($fh);
     return $size2fnamelist;
 }
 
