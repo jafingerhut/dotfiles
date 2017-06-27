@@ -2,11 +2,18 @@
 is_osx || return 1
 
 # APPLE, Y U PUT /usr/bin B4 /usr/local/bin?!
-export PATH="/usr/local/bin:$(path_remove /usr/local/bin)"
-if [ -d /opt/local/bin ]
-then
-    export PATH="/opt/local/bin:$(path_remove /opt/local/bin)"
-fi
+prepend_to_path_if_exists "/usr/local/bin"
+prepend_to_path_if_exists "/opt/local/bin"
+prepend_to_path_if_exists "/opt/local/sbin"
+
+prepend_to_manpath_if_exists "/opt/local/share/man"
+# For some reason, these are not there by default:
+prepend_to_manpath_if_exists "/Developer/usr/share/man"
+prepend_to_manpath_if_exists "/Developer/usr/X11/share/man"
+prepend_to_manpath_if_exists "/Developer/usr/llvm-gcc-4.2/share/man"
+
+prepend_to_manpath_if_exists "/opt/local/share/man"
+prepend_to_manpath_if_exists "$HOME/share/man"
 
 # Trim new lines and copy to clipboard
 alias c="tr -d '\n' | pbcopy"

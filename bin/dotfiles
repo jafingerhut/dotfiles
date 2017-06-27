@@ -62,6 +62,15 @@ function path_remove() {
   echo "$path"
 }
 
+function manpath_remove() {
+  local arg path
+  path=":$MANPATH:"
+  for arg in "$@"; do path="${path//:$arg:/:}"; done
+  path="${path%:}"
+  path="${path#:}"
+  echo "$path"
+}
+
 # Display a fancy multi-select menu.
 # Inspired by http://serverfault.com/a/298312
 function prompt_menu() {
