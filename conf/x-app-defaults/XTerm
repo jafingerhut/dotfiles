@@ -20,5 +20,8 @@ XTerm.vt100.geometry:  =80x50
 !XTerm.vt100.geometry:   =120x48
 !XTerm.vt100.font:      9x15
 !XTerm.vt100.font:      8x13bold
+!XTerm.vt100.font:      8x13
 XTerm.vt100.font:      8x13
-!XTerm.vt100.font:      9x15bold
+XTerm.vt100.utf8Fonts.font:      8x13
+!XTerm*font:      9x15
+!XTerm.vt100.font:      10x20
