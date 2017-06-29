@@ -19,10 +19,21 @@
 ;; Placeholder for user customization code
 (defvar p4_16-mode-hook nil)
 
+(defun p4_16-electric-brace (arg)
+  "Insert a brace."
+  (interactive "*P")
+  (self-insert-command (prefix-numeric-value arg))
+  (save-excursion
+    (move-beginning-of-line nil)
+    (indent-for-tab-command)))
+
 ;; Define the keymap (for now it is pretty much default)
 (defvar p4_16-mode-map
   (let ((map (make-keymap)))
-    (define-key map "\C-j" 'newline-and-indent)
+    (define-key map "\C-j"      'newline-and-indent)
+    (define-key map "{"         'p4_16-electric-brace)
+    (define-key map "}"         'p4_16-electric-brace)
+    (define-key map "\C-c\C-c"  'comment-region)
     map)
   "Keymap for P4_16 major mode")
 
@@ -213,6 +224,11 @@
   (setq major-mode 'p4_16-mode)
   (setq mode-name "P4_16")
   (setq imenu-generic-expression p4_16-imenu-generic-expression)
+  ;; Setting this to nil causes indentation to use only space
+  ;; characters, never tabs.
+  (setq indent-tabs-mode nil)
+  (setq comment-start "// ")
+  (setq comment-end "")
   (imenu-add-to-menubar "P4_16")
   (cscope-minor-mode)
   (run-hooks 'p4_16-mode-hook)
