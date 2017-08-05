@@ -69,9 +69,13 @@ fi
 
 # Install Git Extras
 if [[ ! "$(type -P git-extras)" ]]; then
-  e_header "Installing Git Extras"
-  (
-    cd $DOTFILES/vendor/git-extras &&
-    sudo make install
-  )
+  if [ -d $DOTFILES/vendor/git-extras ]; then
+    e_header "Installing Git Extras"
+    (
+      cd $DOTFILES/vendor/git-extras &&
+      sudo make install
+    )
+  else
+    e_header "Skipping installing Git Extras since there is no directory $DOTFILES/vendor/git-extras"
+  fi
 fi
