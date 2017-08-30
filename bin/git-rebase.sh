@@ -40,4 +40,4 @@ git checkout master && \
     git pull --ff origin master && \
     git checkout ${MY_BRANCH} && \
     git rebase master && \
-    git push ${MY_GITHUB_FORK_NAME} +${MY_BRANCH} && \
+    git push -f ${MY_GITHUB_FORK_NAME} +${MY_BRANCH} && \
