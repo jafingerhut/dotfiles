@@ -1,0 +1,19 @@
+#! /bin/bash
+
+# Start a ClojureScript REPL
+# From: mfikes, Michael Fikes
+
+# Prerequisites:
+
+# Install clj command line tool via instructions on clojure.org
+# getting started.
+
+# Install 'node' executable command (note: I think it needs to be
+# called 'node'.  'nodejs' will not do it):
+
+# Mac: sudo port install nodejs6   (or nodejs7, nodejs8, etc.)
+
+# How to Install Node.js on Ubuntu 16.04:
+# https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-16-04
+
+clj -Sdeps "{:deps {org.clojure/clojurescript {:mvn/version \"1.9.946\"}}}" -m cljs.repl.node
