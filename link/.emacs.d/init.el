@@ -40,7 +40,10 @@
 ;; I don't care if it is slow to display line numbers in large files.
 ;; It is sometimes extremely handy to have the line number displayed
 ;; when ediff-ing two large buffers.
-(setq line-number-display-limit 16000000)
+;;(setq line-number-display-limit 16000000)
+(setq line-number-display-limit nil)
+
+(setq line-number-display-limit-width 1000)
 
 (setq-default ispell-program-name "aspell")
 ;(setq-default ispell-extra-args '("--reverse"))
@@ -246,3 +249,15 @@
 ; Turn off the graphical toolbar
 (tool-bar-mode -1)
 (show-paren-mode 1)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages (quote (cider clojure-mode))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
