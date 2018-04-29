@@ -42,7 +42,6 @@ packages=(
 #  ansible
   build-essential
 #  cowsay
-  emacs24
   git-core
 #  htop
 #  id3tool
@@ -57,6 +56,14 @@ packages=(
   xdiskusage
   xdu
 )
+
+ubuntu_release=`lsb_release -s -r`
+if [[ "${ubuntu_release}" > "18" ]]
+then
+    packages+=(emacs25)
+else
+    packages+=(emacs24)
+fi
 
 packages=($(setdiff "${packages[*]}" "$(dpkg --get-selections | grep -v deinstall | awk '{print $1}')"))
 
