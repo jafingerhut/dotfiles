@@ -32,6 +32,9 @@ alias ldd='otool -L'
 # fwf - find writable files
 alias fwf='find . \! -type d -a -perm -200 -ls'
 
+# fnd - find non-directory files
+alias fnd='find . \! -type d'
+
 #       make mv, cp ask before over writing, and rm ask before removing
 alias mv='mv -i'
 alias cp='cp -i'
