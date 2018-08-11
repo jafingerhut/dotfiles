@@ -107,6 +107,8 @@ function prompt_svn() {
 prompt_stack=()
 trap 'prompt_stack=("${prompt_stack[@]}" "$BASH_COMMAND")' DEBUG
 
+prompt_enable_vcs_info=1
+
 function prompt_command() {
   local exit_code=$?
   # If the first command in the stack is prompt_command, no command was run.
@@ -123,12 +125,26 @@ function prompt_command() {
   prompt_getcolors
   # http://twitter.com/cowboy/status/150254030654939137
   PS1="\n"
-  # svn: [repo:lastchanged]
-  PS1="$PS1$(prompt_svn)"
-  # git: [branch:flags]
-  PS1="$PS1$(prompt_git)"
-  # hg:  [branch:flags]
-  PS1="$PS1$(prompt_hg)"
+
+  # I sometimes work on systems where a 'git status' command takes
+  # several seconds to complete (while in the directory of a clone of
+  # a large git repository, where the file system is NFS-mounted on a
+  # remote NFS server, which I believe slows down traversal of the
+  # files in the clone).  This causes a multi-second delay whenever a
+  # shell prompt is generated, making it painfully slow to wait for
+  # each new prompt.  Like 'simple_prompt' above, use the shell
+  # variable 'prompt_enable_vcs_info' to enable these parts of the
+  # prompt.  A user can do 'unset prompt_enable_vcs_info' in a shell
+  # where they want to speed things up by not including this
+  # information in the prompt.
+  if [[ "$prompt_enable_vcs_info" ]]; then
+      # svn: [repo:lastchanged]
+      PS1="$PS1$(prompt_svn)"
+      # git: [branch:flags]
+      PS1="$PS1$(prompt_git)"
+      # hg:  [branch:flags]
+      PS1="$PS1$(prompt_hg)"
+  fi
   # misc: [cmd#:hist#]
   # PS1="$PS1$c1[$c0#\#$c1:$c0!\!$c1]$c9"
   # path: [user@host:path]
