@@ -85,6 +85,8 @@
 (ido-mode t)
 (require 'xcscope)
 (require 'setnu)
+;(require 'andys-projectile)
+(require 'andys-helm-ag)
 
 
 (defvar font-lock-enabled nil)
