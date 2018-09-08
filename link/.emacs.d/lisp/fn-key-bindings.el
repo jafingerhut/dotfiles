@@ -55,8 +55,8 @@
 (global-set-key [f3]    'revert-buffer-no-confirm)
 (global-set-key [(shift f3)]    'ediff-buffers)
 
-;; f4 open
-;(global-set-key [f4]    'tbd)
+(global-set-key [f4]     'inf-clojure-eval-last-sexp)
+(global-set-key [(control shift f4)]     'inf-clojure-minor-mode)
 
 ;; really handy to avoid me typing C-x C-b C-x o If I ever get used to
 ;; another way to switch between buffers, I might not use this any
