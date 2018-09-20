@@ -1,3 +1,19 @@
+(require 'thingatpt)
+
+(defun viper-search-symbol-at-point ()
+  "Reset viper-s-string to the symbol at point and start tags search"
+  (interactive)
+  (setq viper-s-string (symbol-name (symbol-at-point)))
+  (message "Doing tags search on '%s'..." viper-s-string)
+  (tags-search viper-s-string))
+
+;(defun viper-debug-word-at-point ()
+;  (interactive)
+;  ;(setq viper-s-string (word-at-point))
+;  (setq viper-s-string (symbol-at-point))
+;  (message "Doing tags search on '%s'..." viper-s-string)
+;  )
+
 (defun list-buffers-then-other-window ()
   (interactive)
   (list-buffers)
