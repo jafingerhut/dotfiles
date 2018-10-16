@@ -113,7 +113,9 @@
 	     (eq window-system 'x)
 	     (eq window-system 'w32))
 	 ;; Turn off the graphical toolbar
-	 (tool-bar-mode -1)))
+	 (tool-bar-mode -1)
+	 (menu-bar-mode -1)
+	 (scroll-bar-mode -1)))
 
   (cond
    ((eq window-system 'ns)  ;; NextStep, for Emacs.app
