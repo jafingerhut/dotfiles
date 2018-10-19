@@ -111,6 +111,22 @@ prompt_stack=()
 trap 'prompt_stack=("${prompt_stack[@]}" "$BASH_COMMAND")' DEBUG
 
 prompt_enable_vcs_info=1
+prompt_program_installed_git=0
+if [ `which git` ]
+then
+    prompt_program_installed_git=1
+fi
+prompt_program_installed_hg=0
+if [ `which hg` ]
+then
+    prompt_program_installed_hg=1
+fi
+prompt_program_installed_svn=0
+if [ `which svn` ]
+then
+    prompt_program_installed_svn=1
+fi
+
 
 function prompt_command() {
   local exit_code=$?
@@ -141,12 +157,21 @@ function prompt_command() {
   # where they want to speed things up by not including this
   # information in the prompt.
   if [[ "$prompt_enable_vcs_info" ]]; then
-      # svn: [repo:lastchanged]
-      PS1="$PS1$(prompt_svn)"
-      # git: [branch:flags]
-      PS1="$PS1$(prompt_git)"
-      # hg:  [branch:flags]
-      PS1="$PS1$(prompt_hg)"
+      if [ $prompt_program_installed_svn == 1 ]
+      then
+	  # svn: [repo:lastchanged]
+	  PS1="$PS1$(prompt_svn)"
+      fi
+      if [ $prompt_program_installed_git == 1 ]
+      then
+	  # git: [branch:flags]
+	  PS1="$PS1$(prompt_git)"
+      fi
+      if [ $prompt_program_installed_hg == 1 ]
+      then
+	  # hg:  [branch:flags]
+	  PS1="$PS1$(prompt_hg)"
+      fi
   fi
   # misc: [cmd#:hist#]
   # PS1="$PS1$c1[$c0#\#$c1:$c0!\!$c1]$c9"
