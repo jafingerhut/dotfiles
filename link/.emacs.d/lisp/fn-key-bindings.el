@@ -1,5 +1,7 @@
 (require 'thingatpt)
 
+(defalias 'er 'eval-region)
+
 ;(defun viper-debug-word-at-point ()
 ;  (interactive)
 ;  ;(setq viper-s-string (word-at-point))
@@ -48,6 +50,16 @@
   (let ((sname (symbol-name (symbol-at-point))))
     (occur sname)))
 
+(defun ag-project-for-symbol-at-point-and-enable-follow-mode ()
+  "Do ag-project for the symbol at point, switch to the search
+result buffer, then enable next-error-follow-minor-mode"
+  (interactive)
+  (let ((sname (symbol-name (symbol-at-point))))
+    (ag-project sname)
+    (other-window 1)
+    (next-error-follow-minor-mode)
+    (beginning-of-buffer)))
+
 
 (global-set-key [(control shift f1)]   'andy-setup-first-shell-buffer)
 
@@ -56,6 +68,8 @@
 ;; same function keys, but only one of them usable at a time.
 
 ;; cscope - functions provided by xcscope.el I believe
+
+(global-set-key [(control f1)] 'execute-extended-command)
 
 (global-set-key [f1] 'cscope-find-global-definition)
 (global-set-key [(shift f1)] 'cscope-find-this-symbol)
@@ -116,6 +130,7 @@
 ;; versions as old as 24.5.1 and it seems to be present.
 (global-set-key [(shift f10)]   'isearch-forward-symbol-at-point)
 (global-set-key [(control f10)]  'occur-for-symbol-at-point)
+(global-set-key [(control shift f10)]  'ag-project-for-symbol-at-point-and-enable-follow-mode)
 
 (global-set-key [(control shift f11)]   'set-preferred-buffer-1)
 (global-set-key [f11]   'goto-preferred-buffer-1)
