@@ -83,11 +83,13 @@ result buffer, then enable next-error-follow-minor-mode"
 (global-set-key [(shift f4)]     'inf-clojure)
 (global-set-key [(control shift f4)]     'inf-clojure-minor-mode)
 
-(global-set-key [f5]    'delete-other-windows)  ; normally C-x 1
+(global-set-key [f5]    'ace-jump-buffer)
+(global-set-key [(shift f5)]    'ace-jump-buffer-other-window)
+;;(global-set-key [f5]    'delete-other-windows)  ; normally C-x 1
 ;; really handy to avoid me typing C-x C-b C-x o If I ever get used to
 ;; another way to switch between buffers, I might not use this any
 ;; more.
-(global-set-key [(shift f5)]    'list-buffers-then-other-window)
+;;(global-set-key [(shift f5)]    'list-buffers-then-other-window)
 (when (= emacs-major-version 23)
   (global-set-key [(control f5)]    'split-window-vertically))  ; normally C-x 2
 (when (= emacs-major-version 24)
