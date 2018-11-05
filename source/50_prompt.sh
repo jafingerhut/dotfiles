@@ -112,17 +112,17 @@ trap 'prompt_stack=("${prompt_stack[@]}" "$BASH_COMMAND")' DEBUG
 
 prompt_enable_vcs_info=1
 prompt_program_installed_git=0
-if [ `which git` ]
+if [ `which git >& /dev/null` ]
 then
     prompt_program_installed_git=1
 fi
 prompt_program_installed_hg=0
-if [ `which hg` ]
+if [ `which hg >& /dev/null` ]
 then
     prompt_program_installed_hg=1
 fi
 prompt_program_installed_svn=0
-if [ `which svn` ]
+if [ `which svn >& /dev/null` ]
 then
     prompt_program_installed_svn=1
 fi
