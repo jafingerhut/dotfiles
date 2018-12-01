@@ -11,7 +11,7 @@
 # Install 'node' executable command (note: I think it needs to be
 # called 'node'.  'nodejs' will not do it):
 
-# Mac: sudo port install nodejs6   (or nodejs7, nodejs8, etc.)
+# Mac: sudo port install nodejs10   (other nodejs versions will likely work, too)
 
 # How to Install Node.js on Ubuntu 16.04:
 # https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-16-04
