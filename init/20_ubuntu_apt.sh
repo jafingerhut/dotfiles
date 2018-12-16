@@ -45,7 +45,7 @@ packages=(
   git-core
 #  htop
 #  id3tool
-  libssl-dev
+#  libssl-dev
   mate-terminal
   silversearcher-ag
   sshfs
