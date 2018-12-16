@@ -3,4 +3,4 @@
 # Prerequisites: Install clj command line tool via instructions on
 # clojure.org getting started.
 
-clj -Sdeps "{:deps {org.clojure/clojure {:mvn/version \"1.10.0-RC3\"}}}"
+clj -Sdeps "{:deps {org.clojure/clojure {:mvn/version \"1.10.0-RC5\"}}}"
