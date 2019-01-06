@@ -7,6 +7,10 @@ import re
 #import collections
 #import fileinput
 #import glob
+#from frozendict import frozendict
+
+# See python-2-frozendict.py for examples of operations on frozendict
+# objects.
 
 #    sys.exit(exit_status)
 
