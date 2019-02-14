@@ -21,6 +21,7 @@ show_settings
 dconf write ${KEYPATH}use-theme-colors false
 dconf write ${KEYPATH}background-color "'#2d2d09092222'"
 dconf write ${KEYPATH}foreground-color "'#ffffffffffff'"
+dconf write ${KEYPATH}scrollback-lines 10000
 
 echo ""
 echo "Settings after attempted changes:"
