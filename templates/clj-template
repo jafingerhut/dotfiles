@@ -1,0 +1,28 @@
+#!/bin/bash
+#_(
+   #_DEPS is same format as deps.edn. Multiline is okay.
+   DEPS='{:deps {
+                 clj-time {:mvn/version "0.14.2"}
+                }}'
+   
+   #_You can put other options here
+   OPTS='-J-Xms256m -J-Xmx256m -J-client'
+   
+   exec clojure $OPTS -Sdeps "$DEPS" "$0" "$@"
+)
+;; Written by Eric Normand and published here: 
+;; https://gist.github.com/ericnormand/6bb4562c4bc578ef223182e3bb1e72c5
+;; Clojure code goes here ....
+
+(require '[clojure.java.io :as io]
+         '[clojure.java.shell :as sh]
+         '[clojure.edn :as edn]
+         '[clojure.string :as str]
+         '[clojure.pprint :as pp])
+
+(println "Clojure version:" (clojure-version))
+(println "Hello, world!")
+
+;; If you ever call future or clojure.java.shell/sh, this will avoid a
+;; 60-second wait when the sript is done, until it exits.
+(shutdown-agents)

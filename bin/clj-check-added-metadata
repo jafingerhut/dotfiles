@@ -1,0 +1,245 @@
+#!/bin/bash
+#_(
+   #_DEPS is same format as deps.edn. Multiline is okay.
+   DEPS='{:deps {
+                 org.clojure/clojure {:mvn/version "1.10.1"}
+                }}'
+   
+   #_You can put other options here
+   OPTS='-J-Xms256m -J-Xmx256m -J-client'
+   
+   exec clojure $OPTS -Sdeps "$DEPS" "$0" "$@"
+)
+(require '[clojure.java.io :as io]
+         '[clojure.java.shell :as sh]
+         '[clojure.edn :as edn]
+         '[clojure.string :as str]
+         '[clojure.pprint :as pp])
+
+
+(println "Clojure version " (clojure-version))
+
+(defn map-vals [f m]
+  (into (empty m)
+        (for [[k v] m] [k (f v)])))
+
+(defn map-kv [f m]
+  (into (empty m)
+        (for [[k v] m] (f k v))))
+
+
+(def clojure-versions-oldest-first
+  [
+   {:full-version  "1.0.0" :added-metadata-version  "1.0"}
+   {:full-version  "1.1.0" :added-metadata-version  "1.1"}
+   {:full-version  "1.2.1" :added-metadata-version  "1.2"}
+   {:full-version  "1.3.0" :added-metadata-version  "1.3"}
+   {:full-version  "1.4.0" :added-metadata-version  "1.4"}
+   {:full-version  "1.5.1" :added-metadata-version  "1.5"}
+   {:full-version  "1.6.0" :added-metadata-version  "1.6"}
+   {:full-version  "1.7.0" :added-metadata-version  "1.7"}
+   {:full-version  "1.8.0" :added-metadata-version  "1.8"}
+   {:full-version  "1.9.0" :added-metadata-version  "1.9"}
+   {:full-version "1.10.1" :added-metadata-version "1.10"}
+   ])
+
+(def full-version-to-added (into {} (map (juxt :full-version
+                                               :added-metadata-version)
+                                         clojure-versions-oldest-first)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Code copied from test/clojure/test_clojure/metadata.clj
+
+(def public-namespaces
+  '[clojure.core
+    clojure.pprint
+    clojure.inspector
+    clojure.set
+    clojure.stacktrace
+    clojure.test
+    clojure.walk
+    clojure.xml
+    clojure.zip
+    clojure.java.io
+    clojure.java.browse
+    clojure.java.javadoc
+    clojure.java.shell
+    clojure.string
+    clojure.data
+    clojure.core.protocols
+    clojure.core.reducers
+    clojure.core.server
+    ;; clojure.core.specs.alpha
+    clojure.datafy
+    clojure.edn
+    clojure.instant
+    clojure.java.browse-ui
+    clojure.main
+    ;; clojure.parallel - deprecated, so leave out
+    ;; clojure.reflect
+    clojure.repl
+    ;; clojure.spec namespaces are not built into Clojure itself.
+    ;; Leave out since spec's version numbers progress independently
+    ;; of Clojure's version numbers.
+    ;; clojure.spec.alpha
+    ;; clojure.spec.gen.alpha
+    ;; clojure.template
+    clojure.test.junit
+    clojure.test.tap
+    clojure.uuid
+    ])
+
+(doseq [ns public-namespaces]
+  (require ns))
+
+(def public-vars
+  (mapcat #(vals (ns-publics %)) public-namespaces))
+
+(def public-vars-with-docstrings
+  (filter (comp :doc meta) public-vars))
+
+(def public-vars-with-docstrings-not-generated
+  (remove #(re-find #"^->[A-Z]" (name (.sym %))) public-vars-with-docstrings))
+
+;;(deftest public-vars-with-docstrings-have-added
+;;  (is (= [] (remove (comp :added meta) public-vars-with-docstrings-not-generated))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defn clj-args-for-clj-version [clj-version-str]
+  ["clj" "-Sdeps"
+   (str "{:deps {org.clojure/clojure {:mvn/version \""
+        clj-version-str
+        "\"}}}")])
+
+
+(defn symbol-resolves-form [sym-map]
+  (str "(try"
+       "  (require '" (:namespace-str sym-map) ")"
+       "  (if (resolve '" (:namespace-str sym-map) "/" (:name-str sym-map) ") :yes :no)"
+       "  (catch Throwable t :exception))"))
+
+
+(defn symbols-resolving-in-clj-version [symbols clj-version-str]
+  (println "Checking Clojure version" clj-version-str
+           "for the existence of" (count symbols) "symbols...")
+  (let [forms (map (fn [sym-map]
+                     (str "(assoc " (pr-str sym-map)
+                          "       :symbol-resolves " (symbol-resolves-form
+                                                      sym-map)
+                          "       )"
+                          ))
+                   symbols)
+        big-form-str (apply str (concat
+                                 [ "(pr [ " ]
+                                 (interleave forms (repeat "\n"))
+                                 [ "    ])"]))
+        ;;_ (println "dbg big-form-str " big-form-str)
+        sh-ret (apply sh/sh (concat (clj-args-for-clj-version clj-version-str)
+                                    ["-" :in big-form-str]))
+        ret (and (= 0 (:exit sh-ret))
+                 (= "" (:err sh-ret))
+                 (edn/read-string (:out sh-ret)))]
+    ;;(println "dbg clj-version-str " clj-version-str " ret " ret)
+    ;;(println sh-ret)
+    ret))
+
+
+(defn symbol-to-map [sym]
+  {:symbol-str (str sym)
+   :namespace-str (namespace sym)
+   :name-str (name sym)})
+
+
+(println (count public-vars) "public-vars")
+(println (count public-vars-with-docstrings) "public-vars-with-docstrings")
+(println (count public-vars-with-docstrings-not-generated) "public-vars-with-docstrings-not-generated")
+
+(def symbol-map
+  (->> public-vars-with-docstrings-not-generated
+       (map symbol)
+       (group-by (fn [sym] (str/ends-with? (str sym) "'")))))
+
+(println "Skipping these symbols because they end with ' character and cause problems for early version of Clojure like 1.0.0 and 1.1.0:\n"
+         (get symbol-map true))
+(flush)
+
+(def symbol-list (get symbol-map false))
+(println (count symbol-list) "symbol-list")
+(println "Map from full Clojure version number to the one used in :added metadata strings:")
+(pp/pprint full-version-to-added)
+
+(flush)
+
+
+(defn version-when-added [version-info-list]
+  ;; Convert the sequence of :symbol-resolves values into a string, so
+  ;; I can use a regex to see if it is legal.  Not the only way to do
+  ;; it, but expedient.  Clojure spec would be a good way to do it,
+  ;; too.
+  (if (not (every? (fn [m]
+                     (and (contains? m :version)
+                          (contains? m :symbol-resolves)))
+                   version-info-list))
+    {:problem :some-maps-missing-required-keys}
+    (let [symbol-resolves-str (->> version-info-list
+                                   (map :symbol-resolves)
+                                   (map {:exception "E", :no "N", :yes "Y"})
+                                   (apply str))
+          legal-sequence? (re-matches #"E*N*Y+" symbol-resolves-str)]
+      (if (not legal-sequence?)
+        {:problem :bad-symbol-resolves-sequence}
+        (let [first-yes-version (first (filter #(= :yes (:symbol-resolves %))
+                                               version-info-list))]
+          (if first-yes-version
+            {:problem nil, :first-yes-version (:version first-yes-version)}
+            {:problem :no-yes-version-found}))))))
+
+
+(let [symbol-info (mapv symbol-to-map symbol-list)
+      ;; Doing all symbols at once causes a problem with creating a
+      ;; Java method that is too large.  I could restructure the forms
+      ;; created and sent to the clj subprocesses, but it seems
+      ;; quicker to just work around it by sending smaller groups of
+      ;; symbols at a time.  The problem occurred for 820 symbols.
+      ;; 500 is well below that.
+      symbol-info-parts (partition-all 500 symbol-info)
+      ;; ok symbol-info-parts (partition-all 819 symbol-info)
+      ;; err symbol-info-parts (partition-all 820 symbol-info)
+      clj-full-versions (map :full-version clojure-versions-oldest-first)
+      all-data (mapcat (fn one-clj-version [i]
+                         (let [d (mapcat #(symbols-resolving-in-clj-version % i)
+                                         symbol-info-parts)]
+                           (map (fn [x] (assoc x :full-version i))
+                                d)))
+                       clj-full-versions)
+;;      _ (do (println "all-data" all-data)
+;;            (flush))
+      ;; replace full Clojure version strings with the corresponding
+      ;; version strings used for :added metadata.
+      all-data (map (fn [m]
+                      (-> m
+                          (assoc :version (get full-version-to-added
+                                               (:full-version m)))))
+                    all-data)
+      data-by-symbol (group-by :symbol-str all-data)
+      data-by-symbol (map-kv (fn sel [sym-str ms]
+                               [sym-str
+                                (let [added-meta (-> sym-str symbol
+                                                     resolve meta :added)
+                                      correct-added (version-when-added ms)]
+                                  (merge
+                                   (assoc correct-added
+                                          :added-from-meta added-meta
+                                          :raw-data (map (fn [m]
+                                                           (select-keys
+                                                            m
+                                                            [:version
+                                                             :symbol-resolves]))
+                                                         ms))
+                                   (if (not= added-meta
+                                             (:first-yes-version correct-added))
+                                     {:problem :wrong-added-version})))])
+                             data-by-symbol)]
+  (pp/pprint data-by-symbol))
+
+(shutdown-agents)
