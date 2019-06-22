@@ -17,6 +17,16 @@
          '[clojure.pprint :as pp])
 
 
+(defn err-msg [fmt-str & args]
+  (binding [*out* *err*]
+    (apply clojure.core/printf fmt-str args)
+    (flush)))
+
+(defn die [fmt-str & args]
+  (apply err-msg fmt-str args)
+  (System/exit 1))
+
+
 (println "Clojure version " (clojure-version))
 
 (defn map-vals [f m]
@@ -119,6 +129,12 @@
        "  (catch Throwable t :exception))"))
 
 
+(defn ok-stderr-output? [s]
+  (every? #(or (str/starts-with? % "Downloading: ")
+               (str/blank? %))
+          (str/split-lines s)))
+
+
 (defn symbols-resolving-in-clj-version [symbols clj-version-str]
   (println "Checking Clojure version" clj-version-str
            "for the existence of" (count symbols) "symbols...")
@@ -134,11 +150,28 @@
                                  (interleave forms (repeat "\n"))
                                  [ "    ])"]))
         ;;_ (println "dbg big-form-str " big-form-str)
-        sh-ret (apply sh/sh (concat (clj-args-for-clj-version clj-version-str)
-                                    ["-" :in big-form-str]))
-        ret (and (= 0 (:exit sh-ret))
-                 (= "" (:err sh-ret))
-                 (edn/read-string (:out sh-ret)))]
+        cmd-args (concat (clj-args-for-clj-version clj-version-str) ["-"])
+        sh-ret (apply sh/sh (concat cmd-args
+                                    [:in big-form-str]))
+        _ (let [bad-exit? (not= 0 (:exit sh-ret))
+                bad-stderr? (not (ok-stderr-output? (:err sh-ret)))]
+            (when (or bad-exit? bad-stderr?)
+              (err-msg "\nProblems while attempting to execute command: %s\n"
+                       (str/join " " cmd-args))
+              (when bad-exit?
+                (err-msg "Non-0 exit status %d\n" (:exit sh-ret)))
+              (when bad-stderr?
+                (err-msg "Non-empty STDERR output:\n")
+                (err-msg "%s\n" (:err sh-ret))
+                (err-msg "\n\nSTDOUT output:\n")
+                (err-msg "%s\n" (:out sh-ret)))
+              (die "")))
+        ret (edn/read-string (:out sh-ret))
+        _ (let [bad-out? (not (vector? ret))]
+            (when bad-out?
+              (err-msg "STDOUT output was not read as a vector:\n")
+              (err-msg "%s\n" (:out sh-ret))
+              (die "")))]
     ;;(println "dbg clj-version-str " clj-version-str " ret " ret)
     ;;(println sh-ret)
     ret))
