@@ -20,6 +20,19 @@
          '[clojure.string :as str]
          '[clojure.pprint :as pp])
 
+(println "The full path name of the file containing this code becomes the\n"
+         "value of the Clojure variable *file*:\n"
+         *file*)
+(println)
+(println "Any command line arguments given after the name of this file\n"
+         "become the value of the Clojure variable *command-line-args*,\n"
+         "which is a list of strings.  It never contains the name of the\n"
+         "command, and is an empty list if no arguments are given for the\n"
+         "command:")
+(pr *command-line-args*)
+(println)
+(println)
+
 (println "Clojure version:" (clojure-version))
 (println "Hello, world!")
 
