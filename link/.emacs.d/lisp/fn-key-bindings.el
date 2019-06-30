@@ -9,6 +9,20 @@
 ;  (message "Doing tags search on '%s'..." viper-s-string)
 ;  )
 
+;; If the current window is not the only one in its frame, behave like
+;; delete-other-windows (by default bound to C-x 1), so it becomes the
+;; only one in its frame.
+
+;; If the current window is the only one in its frame, behave like
+;; split-window-below (by default bound to C-x 2).
+(defun delete-other-windows-or-split-window-below ()
+  (interactive)
+  (cond
+   ((= 1 (length (window-list)))
+    (split-window-below))
+   (t
+    (delete-other-windows))))
+
 (defun list-buffers-then-other-window ()
   (interactive)
   (list-buffers)
@@ -96,6 +110,8 @@ result buffer, then enable next-error-follow-minor-mode"
 
 (global-set-key [f3]    'revert-buffer-no-confirm)
 (global-set-key [(shift f3)]    'ediff-buffers)
+
+(global-set-key [f4]    'delete-other-windows-or-split-window-below)
 
 ;;(global-set-key [f5]    'delete-other-windows)  ; normally C-x 1
 ;; really handy to avoid me typing C-x C-b C-x o If I ever get used to
