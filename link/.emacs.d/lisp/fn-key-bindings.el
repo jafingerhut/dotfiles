@@ -14,13 +14,6 @@
   (list-buffers)
   (other-window 1))
 
-(defun andy-setup-first-shell-buffer ()
-  (interactive)
-  (shell)
-;  (delete-other-windows)
-  (local-set-key [f3] 'shell-show-and-resync-dirs)
-  (rename-buffer "sh"))
-
 (defun set-preferred-buffer-1 ()
   (interactive)
   (setq preferred-buffer-1 (current-buffer))
@@ -38,6 +31,14 @@
 (defun goto-preferred-buffer-2 ()
   (interactive)
   (switch-to-buffer preferred-buffer-2))
+
+(defun andy-setup-first-shell-buffer ()
+  (interactive)
+  (shell)
+;  (delete-other-windows)
+  (local-set-key [f3] 'shell-show-and-resync-dirs)
+  (rename-buffer "sh")
+  (set-preferred-buffer-1))
 
 
 (defun revert-buffer-no-confirm ()
@@ -63,28 +64,39 @@ result buffer, then enable next-error-follow-minor-mode"
 
 (global-set-key [(control shift f1)]   'andy-setup-first-shell-buffer)
 
+(global-set-key [(control f1)] 'execute-extended-command)
+
+(global-set-key [f1]    'ace-jump-buffer)
+(global-set-key [(shift f1)]    'ace-jump-buffer-other-window)
+
+(setf inf-clojure-lein-cmd       '("localhost" . 50505))
+(setf inf-clojure-tools-deps-cmd '("localhost" . 50505))
+(global-set-key [f2]             'inf-clojure-eval-last-sexp)
+(global-set-key [(shift f2)]     'inf-clojure-set-ns)
+(global-set-key [(control f2)]   'inf-clojure-connect)
+;;(global-set-key [(control shift f2)]     'inf-clojure-minor-mode)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; These are nice functions to have bound to fn keys when I want to
+;; use cscope or TAGS, but I switch buffers in Emacs by selecting them
+;; from a list so often that I'd like to keep that key very easy to
+;; reach, to change my keyboard usage habits.
+
 ;; It might be nice to have a hard-to-type function key to switch
 ;; between cscope, TAGS, and gid special keys, all overlaid on the
 ;; same function keys, but only one of them usable at a time.
 
 ;; cscope - functions provided by xcscope.el I believe
 
-(global-set-key [(control f1)] 'execute-extended-command)
-
-(global-set-key [f1] 'cscope-find-global-definition)
-(global-set-key [(shift f1)] 'cscope-find-this-symbol)
-(global-set-key [f2] 'cscope-find-functions-calling-this-function)
-(global-set-key [(shift f2)] 'cscope-find-called-functions)
+;;(global-set-key [f1] 'cscope-find-global-definition)
+;;(global-set-key [(shift f1)] 'cscope-find-this-symbol)
+;;(global-set-key [f2] 'cscope-find-functions-calling-this-function)
+;;(global-set-key [(shift f2)] 'cscope-find-called-functions)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (global-set-key [f3]    'revert-buffer-no-confirm)
 (global-set-key [(shift f3)]    'ediff-buffers)
 
-(global-set-key [f4]     'inf-clojure-eval-last-sexp)
-(global-set-key [(shift f4)]     'inf-clojure)
-(global-set-key [(control shift f4)]     'inf-clojure-minor-mode)
-
-(global-set-key [f5]    'ace-jump-buffer)
-(global-set-key [(shift f5)]    'ace-jump-buffer-other-window)
 ;;(global-set-key [f5]    'delete-other-windows)  ; normally C-x 1
 ;; really handy to avoid me typing C-x C-b C-x o If I ever get used to
 ;; another way to switch between buffers, I might not use this any
