@@ -136,6 +136,14 @@ expression starting on line 2, ending on line 16, since the right
 parenthesis on line 16 balances the left parenthesis on line 2.
 Everything between those parentheses is legal syntax for Clojure data.
 
+Why is there `#_DEPS` instead of `# DEPS` on line 4, and a similar
+thing on line 9, you may wonder?  Because if it were `# DEPS`, while
+`bash` still treats that all as part of a comment, the Clojure reader
+treats `# DEPS` as a [reader
+tag](https://clojure.org/guides/weird_characters#tagged_literals).  By
+putting an underscore immediately after the `#` character, the Clojure
+reader reads `DEPS` as a Clojure symbol, and discards it.
+
 Another thing that may be slightly subtle is that the single quote `'`
 characters are used by `bash` to denote that the characters between
 are in a string, as well as double quote characters.  Clojure treats
@@ -147,14 +155,6 @@ that and the following symbol `exec`, and they become `(quote exec)`.
 It would be an error for the Clojure reader if a single quote was the
 last non-whitespace non-comment character before the right parenthesis
 on line 16.
-
-Why is there `#_DEPS` instead of `# DEPS` on line 4, and a similar
-thing on line 9, you may wonder?  Because if it were `# DEPS`, while
-`bash` still treats that all as part of a comment, the Clojure reader
-treats `# DEPS` as a [reader
-tag](https://clojure.org/guides/weird_characters#tagged_literals).  By
-putting an underscore immediately after the `#` character, the Clojure
-reader reads `DEPS` as a Clojure symbol, and discards it.
 
 Once the Clojure reader reads the list on lines 2 through 16, it
 discards it, because of the `#_` immediately before it on line 2.
