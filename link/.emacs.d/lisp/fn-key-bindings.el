@@ -80,8 +80,11 @@ result buffer, then enable next-error-follow-minor-mode"
 
 (global-set-key [(control f1)] 'execute-extended-command)
 
-(global-set-key [f1]    'ace-jump-buffer)
-(global-set-key [(shift f1)]    'ace-jump-buffer-other-window)
+(global-set-key [f1]             'ace-jump-buffer)
+(global-set-key [(shift f1)]     'ace-jump-buffer-other-window)
+
+(define-key viper-vi-global-user-map "s" 'ace-jump-buffer)
+(define-key viper-vi-global-user-map "S" 'ace-jump-buffer-other-window)
 
 (setf inf-clojure-lein-cmd       '("localhost" . 50505))
 (setf inf-clojure-tools-deps-cmd '("localhost" . 50505))
