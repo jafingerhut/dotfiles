@@ -76,11 +76,6 @@ result buffer, then enable next-error-follow-minor-mode"
     (beginning-of-buffer)))
 
 
-(defun cljs-node-repl ()
-  (interactive)
-  (inf-clojure "java -cp /home/jafinger/clj/cljs.jar clojure.main /home/jafinger/clj/cljs-repl.clj"))
-
-
 (global-set-key [(control shift f1)]   'andy-setup-first-shell-buffer)
 
 (global-set-key [(control f1)] 'execute-extended-command)
@@ -96,7 +91,6 @@ result buffer, then enable next-error-follow-minor-mode"
 (global-set-key [f2]             'inf-clojure-eval-last-sexp)
 (global-set-key [(shift f2)]     'inf-clojure-set-ns)
 (global-set-key [(control f2)]   'inf-clojure-connect)
-(global-set-key [(control shift f2)]     'cljs-node-repl)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; These are nice functions to have bound to fn keys when I want to
