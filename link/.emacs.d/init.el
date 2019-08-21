@@ -130,7 +130,12 @@
 		    (width . 80) (height . 60)
 		    ;;(font . "-*-Courier-normal-r-*-*-15-97-*-*-c-*-*-ansi-")
 		    ;;(font . "-*-Courier-normal-r-*-*-15-50-*-*-c-*-*-ansi-")
-		    (font . "-*-Courier-normal-r-*-*-15-25-*-*-c-*-*-ansi-")
+		    ;;(font . "-*-Courier-normal-r-*-*-15-25-*-*-c-*-*-ansi-")
+		    ;;(font . "8x13")
+		    ;;(font . "-*-Andale Mono-normal-normal-normal-*-*-*-15-*-m-0-iso10646-1")
+		    ;;(font . "Andale Mono-13")
+		    ;;(font . "Andale Mono-14")
+		    (font . "Andale Mono-15")
 		    ))))
    ((eq window-system 'x)
     (setq default-frame-alist
