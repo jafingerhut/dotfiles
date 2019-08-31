@@ -75,6 +75,10 @@ result buffer, then enable next-error-follow-minor-mode"
     (next-error-follow-minor-mode)
     (beginning-of-buffer)))
 
+(defun inf-clojure-connect-localhost-50505 ()
+  (interactive)
+  (inf-clojure-connect "localhost" 50505))
+
 
 (global-set-key [(control shift f1)]   'andy-setup-first-shell-buffer)
 
@@ -86,11 +90,9 @@ result buffer, then enable next-error-follow-minor-mode"
 (define-key viper-vi-global-user-map "s" 'ace-jump-buffer)
 (define-key viper-vi-global-user-map "S" 'ace-jump-buffer-other-window)
 
-(setf inf-clojure-lein-cmd       '("localhost" . 50505))
-(setf inf-clojure-tools-deps-cmd '("localhost" . 50505))
 (global-set-key [f2]             'inf-clojure-eval-last-sexp)
 (global-set-key [(shift f2)]     'inf-clojure-set-ns)
-(global-set-key [(control f2)]   'inf-clojure-connect)
+(global-set-key [(control f2)]   'inf-clojure-connect-localhost-50505)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; These are nice functions to have bound to fn keys when I want to
