@@ -2,7 +2,12 @@
 
 import os, sys, re, fileinput, copy
 
-pkgs = {}
+# I have seen /var/lib/dpkg/status files containing descriptions of
+# multiple packages installed with the same package name, with
+# different architectures.  Make pkgs a list, not a map indexed by
+# package name, otherwise we will not report information about all
+# installed packages.
+pkgs = []
 pkg = {}
 
 for line in fileinput.input('/var/lib/dpkg/status'):
@@ -10,7 +15,7 @@ for line in fileinput.input('/var/lib/dpkg/status'):
     # Blank lines separate info about different packages
     if line == '':
         assert pkg['name'] is not None and pkg['installed_size'] is not None
-        pkgs[pkg['name']] = pkg
+        pkgs.append(pkg)
         pkg = {}
         continue
     match = re.search(r"^Package:\s*(.*)$", line)
@@ -31,15 +36,13 @@ for line in fileinput.input('/var/lib/dpkg/status'):
 # Put the last pkg in pkgs, if there was no blank line at the end of the file
 if (len(pkg) > 0 and pkg['name'] is not None and
     pkg['installed_size'] is not None):
-    pkgs[pkg['name']] = pkg
+    pkgs.append(pkg)
 
 total_size = 0
-for pkg_name in pkgs:
-    pkg = pkgs[pkg_name]
+for pkg in pkgs:
     total_size += pkg['installed_size']
 
-pkg_lst = [pkgs[pkg_name] for pkg_name in pkgs]
-pkgs_by_size = sorted(pkg_lst,
+pkgs_by_size = sorted(pkgs,
                       key=lambda pkg: (pkg['installed_size'], pkg['name']))
 
 for pkg in pkgs_by_size:
