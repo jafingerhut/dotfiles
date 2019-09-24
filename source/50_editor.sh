@@ -2,7 +2,13 @@
 
 alias vi=vim
 
-if [ -x "/opt/local/bin/emacs" ]
+if [ -x "/Applications/Emacs.app/Contents/MacOS/Emacs" ]
+then
+    # On a new Mac of mine, I am going to give it a whirl to try using
+    # GNU Emacs for Mac OS X downloaded from
+    # https://emacsformacosx.com
+    EMACS="/Applications/Emacs.app/Contents/MacOS/Emacs"
+elif [ -x "/opt/local/bin/emacs" ]
 then
     # On my Macs, I like to use the MacPorts-installed version of
     # Emacs over the version that comes with OS X by default, which is
