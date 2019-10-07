@@ -79,6 +79,63 @@ result buffer, then enable next-error-follow-minor-mode"
   (interactive)
   (inf-clojure-connect "localhost" 50505))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; comint-echo-and-send-string is a slight modification of
+;; comint-send-string, copied from comint.el.  It calls
+;; insert-before-markers so that the string sent to the process
+;; definitely appears within the comint buffer.  This can be useful
+;; for a subprocess that does not echo its input, and we want to send
+;; commands copied from other buffers to the comint buffer, and see
+;; which commands were run when looking at the history.
+(defun comint-echo-and-send-string (process string)
+  "Like `process-send-string', but also does extra bookkeeping for Comint mode."
+  (if process
+      (with-current-buffer (if (processp process)
+			       (process-buffer process)
+			     (get-buffer process))
+	(comint-snapshot-last-prompt)
+	(insert-before-markers string))
+    (comint-snapshot-last-prompt))
+  (process-send-string process string))
+
+;; all functions with inf-clojure in their name below were copied from
+;; inf-clojure.el, then simply changed to call the new version with
+;; "echo-and" in its name.  inf-clojure--echo-and-send-string was also
+;; modified to preserve the original string, no longer sending the
+;; 'sanitized' version returned by inf-clojure--sanitize-command
+
+(defun inf-clojure--echo-and-send-string (proc string)
+  "A custom `comint-input-sender` / `comint-send-string`.
+It performs the required side effects on every send for PROC and
+STRING (for example set the buffer local REPL type).  It should
+always be preferred over `comint-send-string`.  It delegates to
+`comint-simple-send` so it always appends a newline at the end of
+the string for evaluation.  Refer to `comint-simple-send` for
+customizations."
+  (inf-clojure--set-repl-type proc)
+  (let ((sanitized (inf-clojure--sanitize-command string)))
+    (inf-clojure--log-string sanitized "----CMD->")
+    (comint-echo-and-send-string proc (concat string "\n"))))
+
+(defun inf-clojure-echo-and-eval-region (start end &optional and-go)
+  "Send the current region to the inferior Clojure process.
+Prefix argument AND-GO means switch to the Clojure buffer afterwards."
+  (interactive "r\nP")
+  ;; drops newlines at the end of the region
+  (let ((str (replace-regexp-in-string
+              "[\n]+\\'" ""
+              (buffer-substring-no-properties start end))))
+    (inf-clojure--echo-and-send-string (inf-clojure-proc) str))
+  (when and-go (inf-clojure-switch-to-repl t)))
+
+(defun inf-clojure-echo-and-eval-last-sexp (&optional and-go)
+  "Send the previous sexp to the inferior Clojure process.
+Prefix argument AND-GO means switch to the Clojure buffer afterwards."
+  (interactive "P")
+  (inf-clojure-echo-and-eval-region (save-excursion (backward-sexp) (point)) (point) and-go))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 (global-set-key [(control shift f1)]   'andy-setup-first-shell-buffer)
 
@@ -90,9 +147,18 @@ result buffer, then enable next-error-follow-minor-mode"
 (define-key viper-vi-global-user-map "s" 'ace-jump-buffer)
 (define-key viper-vi-global-user-map "S" 'ace-jump-buffer-other-window)
 
-(global-set-key [f2]             'inf-clojure-eval-last-sexp)
+;; This is my modified version of inf-clojure-eval-last-sexp that
+;; _does_ copy the expression to evaluate into the *inf-clojure*
+;; buffer, so one can see the expressions being evaluated in the
+;; interaction history.
+(global-set-key [f2]             'inf-clojure-echo-and-eval-last-sexp)
+;; This is the version included with inf-clojure that does _not_ copy
+;; the expression to evaluate into the *inf-clojure* buffer.  This can
+;; be useful for large expressions to evaluate, that I do not want
+;; cluttering up the buffer contents.
+(global-set-key [(control f2)]   'inf-clojure-eval-last-sexp)
 (global-set-key [(shift f2)]     'inf-clojure-set-ns)
-(global-set-key [(control f2)]   'inf-clojure-connect-localhost-50505)
+(global-set-key [(control shift f2)]   'inf-clojure-connect-localhost-50505)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; These are nice functions to have bound to fn keys when I want to
