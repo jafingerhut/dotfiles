@@ -292,7 +292,7 @@ fi
 if [[ ! -d $DOTFILES ]]; then
   # $DOTFILES directory doesn't exist? Clone it!
   new_dotfiles_install=1
-  prompt_delay=15
+  prompt_delay=10
   e_header "Downloading dotfiles"
   git clone --recursive git://github.com/${github_user:-cowboy}/dotfiles.git $DOTFILES
   cd $DOTFILES

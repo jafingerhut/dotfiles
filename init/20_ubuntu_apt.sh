@@ -58,7 +58,10 @@ packages=(
 )
 
 ubuntu_release=`lsb_release -s -r`
-if [[ "${ubuntu_release}" > "18" ]]
+if [[ "${ubuntu_release}" > "19" ]]
+then
+    packages+=(emacs-gtk)
+elif [[ "${ubuntu_release}" > "18" ]]
 then
     packages+=(emacs25)
 else
