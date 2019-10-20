@@ -69,6 +69,7 @@ echo "Continuing with installation..."
 # Command from Rust web site recommended on Linux and macOS for
 # installing Rust and Cargo, found on this page:
 # https://doc.rust-lang.org/cargo/getting-started/installation.html
+sudo apt-get --yes install curl
 curl https://sh.rustup.rs -sSf | sh
 
 # Then I logged off and back on again so that changes to $HOME/.profile
