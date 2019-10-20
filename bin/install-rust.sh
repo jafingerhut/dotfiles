@@ -8,6 +8,7 @@ warning() {
     1>&2 echo ""
     1>&2 echo "This install script has only been tested on these"
     1>&2 echo "systems so far:"
+    1>&2 echo "    Ubuntu 16.04"
     1>&2 echo "    Ubuntu 18.04"
     1>&2 echo "    Ubuntu 19.10"
     1>&2 echo ""
@@ -44,7 +45,7 @@ continue_status=1
 
 distributor_id=`lsb_release -si`
 release=`lsb_release -sr`
-if [ "${distributor_id}" = "Ubuntu" -a \( "${release}" = "18.04" -o "${release}" = "19.10" \) ]
+if [ "${distributor_id}" = "Ubuntu" -a \( "${release}" = "16.04" -o "${release}" = "18.04" -o "${release}" = "19.10" \) ]
 then
     echo "Found distributor '${distributor_id}' release '${release}'.  Continuing with installation."
 else
