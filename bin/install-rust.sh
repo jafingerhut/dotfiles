@@ -6,11 +6,30 @@
 
 warning() {
     1>&2 echo ""
-    1>&2 echo "This install script has only been tested on Ubuntu 18.04 so far."
-    1>&2 echo "Proceed at your own risk of"
-    1>&2 echo "significant time spent figuring out how to make it all work, or"
-    1>&2 echo "consider getting VirtualBox and creating an Ubuntu 18.04 virtual"
-    1>&2 echo "machine."
+    1>&2 echo "This install script has only been tested on these"
+    1>&2 echo "systems so far:"
+    1>&2 echo "    Ubuntu 18.04"
+    1>&2 echo "    Ubuntu 19.10"
+    1>&2 echo ""
+    1>&2 echo "Proceed at your own risk of significant time spent"
+    1>&2 echo "figuring out how to make it all work, or consider"
+    1>&2 echo "getting VirtualBox and creating a virtual machine with"
+    1>&2 echo "one of the tested systems above."
+}
+
+continue_yes_or_no() {
+    local prompt="$1"
+    local answer
+    while true
+    do
+        echo -n "${prompt} [y/n] "
+        read answer
+        case ${answer:0:1} in
+        y|Y) return 1 ;;
+        n|N) return 0 ;;
+        *) echo "Please answer y or n" ;;
+        esac
+    done
 }
 
 lsb_release >& /dev/null
@@ -21,9 +40,11 @@ then
     exit 1
 fi
 
+continue_status=1
+
 distributor_id=`lsb_release -si`
 release=`lsb_release -sr`
-if [ "${distributor_id}" = "Ubuntu" -a \( "${release}" = "18.04" \) ]
+if [ "${distributor_id}" = "Ubuntu" -a \( "${release}" = "18.04" -o "${release}" = "19.10" \) ]
 then
     echo "Found distributor '${distributor_id}' release '${release}'.  Continuing with installation."
 else
@@ -31,8 +52,19 @@ else
     1>&2 echo ""
     1>&2 echo "Here is what command 'lsb_release -a' shows this OS to be:"
     lsb_release -a
+    continue_yes_or_no "Continue with installation attempt?"
+    continue_status=$?
+fi
+
+if [ $continue_status == 0 ]
+then
+    echo "Aborting installation"
     exit 1
 fi
+
+echo "Continuing with installation..."
+#echo "(Aborting for test purposes)"
+#exit 0
 
 # Command from Rust web site recommended on Linux and macOS for
 # installing Rust and Cargo, found on this page:
