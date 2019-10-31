@@ -24,6 +24,10 @@
          "value of the Clojure variable *file*:\n"
          *file*)
 (println)
+(println "The base name of the file containing this code becomes the\n"
+         "value of the Clojure variable *source-path*:\n"
+         *source-path*)
+(println)
 (println "Any command line arguments given after the name of this file\n"
          "become the value of the Clojure variable *command-line-args*,\n"
          "which is a list of strings.  It never contains the name of the\n"
