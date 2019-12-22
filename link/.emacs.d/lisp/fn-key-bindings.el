@@ -99,11 +99,14 @@ result buffer, then enable next-error-follow-minor-mode"
     (comint-snapshot-last-prompt))
   (process-send-string process string))
 
-;; all functions with inf-clojure in their name below were copied from
-;; inf-clojure.el, then simply changed to call the new version with
-;; "echo-and" in its name.  inf-clojure--echo-and-send-string was also
-;; modified to preserve the original string, no longer sending the
-;; 'sanitized' version returned by inf-clojure--sanitize-command
+;; All functions with inf-clojure in their name below were copied from
+;; inf-clojure.el, then modified in some way.  Some were simply
+;; changed to call the new version with "echo-and" in its name, but
+;; some have undergone larger changes since they were copied.
+;; inf-clojure--echo-and-send-string (renamed from
+;; inf-clojure--echo-and-send-region) was also modified to preserve
+;; the original string, no longer sending the 'sanitized' version
+;; returned by inf-clojure--sanitize-command
 
 (defun inf-clojure--echo-and-send-string (proc string)
   "A custom `comint-input-sender` / `comint-send-string`.
@@ -118,24 +121,47 @@ customizations."
     (inf-clojure--log-string sanitized "----CMD->")
     (comint-echo-and-send-string proc (concat string "\n"))))
 
-(defun inf-clojure-echo-and-eval-region (start end &optional and-go)
-  "Send the current region to the inferior Clojure process.
+(defun inf-clojure-echo-and-eval-string (str &optional and-go)
+  "Send the string to the inferior Clojure process.
 Prefix argument AND-GO means switch to the Clojure buffer afterwards."
   (interactive "r\nP")
-  ;; drops newlines at the end of the region
-  (let ((str (replace-regexp-in-string
-              "[\n]+\\'" ""
-              (buffer-substring-no-properties start end))))
-    (inf-clojure--echo-and-send-string (inf-clojure-proc) str))
+  (inf-clojure--echo-and-send-string (inf-clojure-proc) str)
   (when and-go (inf-clojure-switch-to-repl t)))
+
+(defun remove-newlines-at-end (str)
+  (replace-regexp-in-string "[\n]+\\'" "" str))
+
+(defun sexp-before-point ()
+  (let ((start (save-excursion (backward-sexp) (point)))
+	(end (point)))
+    (remove-newlines-at-end (buffer-substring-no-properties start end))))
 
 (defun inf-clojure-echo-and-eval-last-sexp (&optional and-go)
   "Send the previous sexp to the inferior Clojure process.
 Prefix argument AND-GO means switch to the Clojure buffer afterwards."
   (interactive "P")
-  (inf-clojure-echo-and-eval-region (save-excursion (backward-sexp) (point)) (point) and-go))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (inf-clojure-echo-and-eval-string (sexp-before-point) and-go))
 
+;; I copied the idea for function wrap-clojure-code-in-rebl-submit
+;; from Sean Corfield's corresponding code he wrote for the Atom
+;; editor, function "wrap_in_rebl_submit" in this file:
+;; https://github.com/seancorfield/atom-chlorine-setup/blob/master/init.coffee
+
+(defun wrap-clojure-code-in-rebl-submit (code-str)
+  (concat "(let [value " code-str "] "
+	  "(try"
+	  "  ((requiring-resolve 'cognitect.rebl/submit) '" code-str " value)"
+	  "  (catch Throwable _))"
+	  " value)"))
+
+(defun inf-clojure-echo-and-eval-last-sexp-to-rebl (&optional and-go)
+  "Send the previous sexp to the inferior Clojure process.
+Prefix argument AND-GO means switch to the Clojure buffer afterwards."
+  (interactive "P")
+  (inf-clojure-echo-and-eval-string (wrap-clojure-code-in-rebl-submit
+				     (sexp-before-point))
+				    and-go))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (global-set-key [(control shift f1)]   'andy-setup-first-shell-buffer)
 
@@ -156,7 +182,8 @@ Prefix argument AND-GO means switch to the Clojure buffer afterwards."
 ;; the expression to evaluate into the *inf-clojure* buffer.  This can
 ;; be useful for large expressions to evaluate, that I do not want
 ;; cluttering up the buffer contents.
-(global-set-key [(control f2)]   'inf-clojure-eval-last-sexp)
+;;(global-set-key [(control f2)]   'inf-clojure-eval-last-sexp)
+(global-set-key [(control f2)]   'inf-clojure-echo-and-eval-last-sexp-to-rebl)
 (global-set-key [(shift f2)]     'inf-clojure-set-ns)
 (global-set-key [(control shift f2)]   'inf-clojure-connect-localhost-50505)
 
