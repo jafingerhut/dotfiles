@@ -1,0 +1,188 @@
+;; The deps.edn file describes the information needed to build a classpath.
+;;
+;; When using the `clojure` or `clj` script, there are several deps.edn files
+;; that are combined:
+;; - install-level
+;; - user level (this file)
+;; - project level (current directory when invoked)
+;;
+;; For all attributes other than :paths, these config files are merged left to right.
+;; Only the last :paths is kept and others are dropped.
+
+{
+  ;; Paths
+  ;;   Directories in the current project to include in the classpath
+
+  ;; :paths ["src"]
+
+  ;; External dependencies
+ 
+  ;; :deps {
+  ;;   org.clojure/clojure {:mvn/version "1.10.1"}
+  ;; }
+
+  ;; Aliases
+ ;;   resolve-deps aliases (-R) affect dependency resolution, options:
+ ;;     :extra-deps - specifies extra deps to add to :deps
+ ;;     :override-deps - specifies a coordinate to use instead of that in :deps
+ ;;     :default-deps - specifies a coordinate to use for a lib if one isn't found
+ ;;   make-classpath aliases (-C) affect the classpath generation, options:
+ ;;     :extra-paths - vector of additional paths to add to the classpath
+ ;;     :classpath-overrides - map of lib to path that overrides the result of resolving deps
+
+ :aliases
+ {
+  ;; Common alias to use for all Clojure/Java commands
+  :clj {:jvm-opts ["-XX:-OmitStackTraceInFastThrow"]}
+  ;; Common alias to use for all ClojureScript commands
+  :cljs {:extra-deps {org.clojure/clojurescript {:mvn/version "1.10.597"}}
+         :jvm-opts ["-XX:-OmitStackTraceInFastThrow"]}
+
+  :heap-small {:jvm-opts ["-Xmx512m"]}
+  :heap-1g {:jvm-opts ["-Xmx1g"]}
+  :heap-1.5g {:jvm-opts ["-Xmx1536m"]}
+  :heap-2g {:jvm-opts ["-Xmx2g"]}
+
+  :rebl {:extra-deps {org.clojure/clojure {:mvn/version "1.10.1"}
+                      org.clojure/core.async {:mvn/version "0.4.490"}
+                      com.cognitect/rebl {:local/root "/Users/andy/clj/rebl/REBL-LATEST.jar"}
+                      
+                      ;; deps for file datafication (0.9.149 or later)
+                      org.clojure/data.csv {:mvn/version "0.1.4"}
+                      org.clojure/data.json {:mvn/version "0.2.3"}
+                      org.yaml/snakeyaml {:mvn/version "1.23"}
+                      
+                      ;; The org.openjfx deps are unnecessary if you
+                      ;; use a JDK that has Java FX libraries
+                      ;; included, e.g. Zulu OpenJDK 8 or 11
+                      ;; with "JDK FX" in its description when you
+                      ;; download it.
+                      ;;org.openjfx/javafx-fxml     {:mvn/version "11.0.1"}
+                      ;;org.openjfx/javafx-controls {:mvn/version "11.0.1"}
+                      ;;org.openjfx/javafx-swing    {:mvn/version "11.0.1"}
+                      ;;org.openjfx/javafx-base     {:mvn/version "11.0.1"}
+                      ;;org.openjfx/javafx-web      {:mvn/version "11.0.1"}
+                      }
+         :main-opts ["-m" "cognitect.rebl"]}
+  
+;;  :rebl-8
+;;  {:extra-deps {org.clojure/core.async {:mvn/version "0.4.490"}
+;;                ;; deps for file datafication (0.9.149 or later)
+;;                org.clojure/data.csv {:mvn/version "0.1.4"}
+;;                org.clojure/data.json {:mvn/version "0.2.3"}
+;;                org.yaml/snakeyaml {:mvn/version "1.23"}
+;;                com.cognitect/rebl
+;;                ;; adjust to match your install location
+;;                {:local/root "/Users/andy/clj/rebl/REBL-0.9.220/rebl-0.9.220.jar"}}
+;;   :main-opts ["-m" "cognitect.rebl"]}
+
+;;  :rebl-11
+;;  {:extra-deps {org.clojure/core.async {:mvn/version "0.4.490"}
+;;                ;; deps for file datafication (0.9.149 or later)
+;;                org.clojure/data.csv {:mvn/version "0.1.4"}
+;;                org.clojure/data.json {:mvn/version "0.2.3"}
+;;                org.yaml/snakeyaml {:mvn/version "1.23"}
+;;                com.cognitect/rebl
+;;                ;; adjust to match your install location
+;;                {:local/root "/Users/andy/clj/rebl/REBL-0.9.220/rebl-0.9.220.jar"}
+;;                org.openjfx/javafx-fxml     {:mvn/version "11.0.1"}
+;;                org.openjfx/javafx-controls {:mvn/version "11.0.1"}
+;;                org.openjfx/javafx-graphics {:mvn/version "11.0.1"}
+;;                org.openjfx/javafx-media    {:mvn/version "11.0.1"}
+;;                org.openjfx/javafx-swing    {:mvn/version "11.0.1"}
+;;                org.openjfx/javafx-base     {:mvn/version "11.0.1"}
+;;                org.openjfx/javafx-web      {:mvn/version "11.0.1"}}
+;;   :main-opts ["-m" "cognitect.rebl"]}
+           
+  ;; - start a Clojure/Java Socket REPL on port 50505
+  :socket
+  {:jvm-opts
+   ["-Dclojure.server.repl={:port,50505,:accept,clojure.core.server/repl}"]}
+  ;; start a Node-based ClojureScript socket REPL on port 50505
+  :cljs-socket
+  {:jvm-opts
+   ["-Dclojure.server.repl={:port,50505,:accept,cljs.server.node/repl}"]}
+  
+  :socket2
+  {:jvm-opts ["-Dclojure.server.repl={:port,50505,:accept,clojure.core.server/repl}"
+              "-Dclojure.server.repl={:port,60606,:accept,clojure.core.server/repl}"]}
+
+;;  :cljol {:extra-deps {cljol {:local/root "/Users/andy/clj/cljol"}
+;;                       org.clojure/clojure {:mvn/version "1.7.0"}}}
+  :cljol {:extra-deps {cljol {:git/url "https://github.com/jafingerhut/cljol"
+                              :sha "bb5549e9832e73e4a9fc5dfdf695c48e797729fa"}}}
+
+  :classdiag {:extra-deps
+              {com.stuartsierra/class-diagram
+               #_{:git/url "https://github.com/jafingerhut/class-diagram"
+                  :sha "b317726c7952635484c76a596fcde2ee5bfc0782"}
+               {:local/root "/Users/andy/clj/forks/class-diagram"}}}
+
+  :uber {:extra-deps
+         {ubergraph
+          {:mvn/version "0.8.2"
+           :exclusions [tailrecursion/cljs-priority-map]}
+          ;; Version 0.8.2 plus more extensive doc strings by me
+          ;;{:git/url "https://github.com/jafingerhut/ubergraph"
+          ;; :sha "b7ace35334e5fc6d44458bdf420dd1e7fd70ff4a"}
+          }}
+
+  :data {:extra-deps {
+                      ;; (require '[medley.core :as med])
+                      ;; https://github.com/weavejester/medley
+                      medley {:mvn/version "1.2.0"}
+                      
+                      ;; https://github.com/clj-commons/useful
+                      org.flatland/useful {:mvn/version "0.11.6"}
+
+                      ;; https://github.com/cloojure/tupelo
+                      tupelo {:mvn/version "0.9.188"}
+
+                      ;; https://github.com/clojure/data.json
+                      ;; (require '[clojure.data.json :as json])
+                      org.clojure/data.json {:mvn/version "0.2.7"}
+                      
+                      ;; (require '[cheshire.core :as chesh])
+                      ;; https://github.com/dakrone/cheshire
+                      cheshire {:mvn/version "5.9.0"}
+
+                      ;; https://github.com/mmcgrana/clj-json
+                      ;; (require '[clj-json.core :as cjson])
+                      ;; This one is in a separate alias since it uses
+                      ;; the Jackson library, which can often result
+                      ;; in version conflicts with its use in many
+                      ;; other libraries.
+                      ;;clj-json {:mvn/version "0.5.3"}
+
+                      ;; (require '[clojure.data.csv :as dcsv])
+                      ;; https://github.com/clojure/data.csv
+                      org.clojure/data.csv {:mvn/version "0.1.4"}
+
+                      ;; (require '[clojure-csv.core :as ccsv])
+                      ;; https://github.com/davidsantiago/clojure-csv
+                      clojure-csv/clojure-csv {:mvn/version "2.0.1"}
+
+                      ;; (require '[semantic-csv.core :as scsv])
+                      ;; https://github.com/metasoarous/semantic-csv
+                      semantic-csv {:mvn/version "0.2.1-alpha1"}
+
+                      }}
+  ;;   :deps {:extra-deps {org.clojure/tools.deps.alpha {:mvn/version "0.7.541"}}}
+  ;;   :test {:extra-paths ["test"]}
+  :ion-dev {:deps {com.datomic/ion-dev {:mvn/version "0.9.247"}}
+            :main-opts ["-m" "datomic.ion.dev"]}
+
+  ;; (require '[criterium.core :as crit])
+  :profile {:deps {criterium {:mvn/version "0.4.5"}
+                   com.clojure-goes-fast/clj-async-profiler {:mvn/version "0.4.0"}}}
+  }
+ 
+ ;; Provider attributes
+ 
+ :mvn/repos'
+ {
+  ;;   "central" {:url "https://repo1.maven.org/maven2/"}
+  ;;   "clojars" {:url "https://repo.clojars.org/"}
+  "datomic-cloud" {:url "s3://datomic-releases-1fc2183a/maven/releases"}
+  }
+}
