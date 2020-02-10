@@ -18,4 +18,5 @@
 
 #clj -Sdeps "{:deps {org.clojure/clojurescript {:mvn/version \"1.9.946\"}}}" -m cljs.repl.node
 #clj -Sdeps "{:deps {org.clojure/clojurescript {:mvn/version \"1.10.439\"}}}" -m cljs.main --repl-env node
-clj -Sdeps "{:deps {org.clojure/clojurescript {:mvn/version \"1.10.520\"}}}" -m cljs.main --repl-env node
+#clj -Sdeps "{:deps {org.clojure/clojurescript {:mvn/version \"1.10.520\"}}}" -m cljs.main --repl-env node
+clj -Sdeps "{:deps {org.clojure/clojurescript {:mvn/version \"1.10.597\"}}}" -m cljs.main --repl-env node
