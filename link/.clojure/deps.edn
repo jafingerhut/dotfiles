@@ -42,7 +42,7 @@
   :heap-1g {:jvm-opts ["-Xmx1g"]}
   :heap-1.5g {:jvm-opts ["-Xmx1536m"]}
   :heap-2g {:jvm-opts ["-Xmx2g"]}
-
+  
   :rebl {:extra-deps {org.clojure/clojure {:mvn/version "1.10.1"}
                       org.clojure/core.async {:mvn/version "0.4.490"}
                       com.cognitect/rebl {:local/root "/Users/andy/clj/rebl/REBL-LATEST.jar"}
@@ -131,6 +131,18 @@
                       ;; (require '[medley.core :as med])
                       ;; https://github.com/weavejester/medley
                       medley {:mvn/version "1.2.0"}
+
+                      ;; (require '[clojure.tools.reader.edn :as tredn])
+                      ;; (tredn/read ...)
+                      ;; (tredn/read-string ...)
+                      ;; https://github.com/clojure/tools.reader
+                      org.clojure/tools.reader {:mvn/version "1.3.2"}
+
+                      ;; (require '[clojure.data.prioity-map :as pm])
+                      ;; (pm/priority-map :a 2 :b 1)
+                      ;; (pm/priority-map-by compare :a 2 :b 1)
+                      ;; https://github.com/clojure/data.priority-map
+                      org.clojure/data.priority-map {:mvn/version "0.0.10"}
                       
                       ;; https://github.com/clj-commons/useful
                       org.flatland/useful {:mvn/version "0.11.6"}
@@ -179,7 +191,7 @@
  
  ;; Provider attributes
  
- :mvn/repos'
+ :mvn/repos
  {
   ;;   "central" {:url "https://repo1.maven.org/maven2/"}
   ;;   "clojars" {:url "https://repo.clojars.org/"}
