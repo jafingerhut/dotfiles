@@ -80,6 +80,9 @@
 ;; built-in-desktop is set to 2880x1800 resolution, but I would guess
 ;; that Xquartz is using larger pixels than that.
 (defvar x-windows-default-frame-left-val (if osx-p 765 -5))
+(defvar andy-emacs-font (getenv "ANDY_EMACS_FONT"))
+(defvar x-windows-font (cond (andy-emacs-font andy-emacs-font)
+                             (t "8x13")))
 
 (require 'ido)
 (ido-mode t)
@@ -142,7 +145,11 @@
 	  (append default-frame-alist
 		  (list '(top . 0) (cons 'left x-windows-default-frame-left-val)
 			'(width . 80) '(height . 64)
-			'(font . "8x13")
+			;;'(font . "8x13")
+			;;'(font . "9x15")
+			;;'(font . "9x18")
+			;;'(font . "10x20")
+			(cons 'font x-windows-font)
 			))))
    ((eq window-system 'w32)
 ;    (setq default-frame-alist
