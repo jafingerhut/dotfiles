@@ -24,6 +24,15 @@ else
     export EMACS="emacs"
 fi
 
+# Override default Emacs font in my init.el if I am running on a machine
+# with 'linwin' as part of the name.  I plan to use that as part of the
+# name for Linux VMs I create on a Windows machine where this font size
+# works better for my viewing.
+if [[ `uname -n` == *"linwin"* ]]
+then
+    export ANDY_EMACS_FONT="10x20"
+fi
+
 export EDITOR="${EMACS}"
 export VISUAL="${EDITOR}"
 alias e="${EDITOR}"
