@@ -1,0 +1,42 @@
+#!/bin/bash
+#_(
+   #_DEPS is same format as deps.edn. Multiline is okay.
+   DEPS='{:deps {
+                 org.clojure/clojure {:mvn/version "1.10.1"}
+                }}'
+   
+   #_You can put other options here
+   OPTS='-J-Xms256m -J-Xmx256m -J-client'
+   
+   exec clojure $OPTS -Sdeps "$DEPS" -M "$0" "$@"
+)
+
+(require '[clojure.java.io :as io]
+         '[clojure.java.shell :as sh]
+         '[clojure.edn :as edn]
+         '[clojure.string :as str]
+         '[clojure.pprint :as pp])
+
+(println "Hello, world!")
+
+;; Command line arguments are available as a sequence of strings in
+;; *command-line-args*
+
+;;(println "(class *command-line-args*)=" (class *command-line-args*))
+(println (count *command-line-args*) "command line args were given:")
+(doall (map-indexed (fn [idx arg]
+                      (printf "%2d: '%s'\n" idx arg))
+                    *command-line-args*))
+
+;; One way to invoke commands is to use clojure.java.shell/sh
+;; One can also use 
+(doseq [fname *command-line-args*]
+  (let [sh-ret (sh/sh "openssl" "md5" fname)]
+    (pp/pprint sh-ret)))
+
+;; If you use clojure.java.shell/sh or anything else that creates a
+;; future, then typically the program will execute, then 'hang'
+;; silently for about 60 seconds before it exits.  You can avoid this
+;; by making the following call when you are done, or (System/exit
+;; <some-number>)
+(shutdown-agents)
