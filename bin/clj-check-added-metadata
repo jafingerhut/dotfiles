@@ -8,8 +8,9 @@
    #_You can put other options here
    OPTS='-J-Xms256m -J-Xmx256m -J-client'
    
-   exec clojure $OPTS -Sdeps "$DEPS" "$0" "$@"
+   exec clojure $OPTS -Sdeps "$DEPS" -M "$0" "$@"
 )
+
 (require '[clojure.java.io :as io]
          '[clojure.java.shell :as sh]
          '[clojure.edn :as edn]

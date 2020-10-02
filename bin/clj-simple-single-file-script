@@ -29,7 +29,9 @@
                     *command-line-args*))
 
 ;; One way to invoke commands is to use clojure.java.shell/sh
-;; One can also use 
+;; One can also use Java ProcessBuilder APIs:
+;; https://docs.oracle.com/javase/7/docs/api/java/lang/ProcessBuilder.html
+;; or conch: https://github.com/clj-commons/conch
 (doseq [fname *command-line-args*]
   (let [sh-ret (sh/sh "openssl" "md5" fname)]
     (pp/pprint sh-ret)))
