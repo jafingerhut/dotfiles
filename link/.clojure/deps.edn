@@ -107,10 +107,10 @@
   {:jvm-opts ["-Dclojure.server.repl={:port,50505,:accept,clojure.core.server/repl}"
               "-Dclojure.server.repl={:port,60606,:accept,clojure.core.server/repl}"]}
 
-;;  :cljol {:extra-deps {cljol {:local/root "/Users/andy/clj/cljol"}
+;;  :cljol {:extra-deps {cljol/cljol {:local/root "/Users/andy/clj/cljol"}
 ;;                       org.clojure/clojure {:mvn/version "1.7.0"}}}
-  :cljol {:extra-deps {cljol {:git/url "https://github.com/jafingerhut/cljol"
-                              :sha "bb5549e9832e73e4a9fc5dfdf695c48e797729fa"}}}
+  :cljol {:extra-deps {cljol/cljol {:git/url "https://github.com/jafingerhut/cljol"
+                                    :sha "bb5549e9832e73e4a9fc5dfdf695c48e797729fa"}}}
 
   :classdiag {:extra-deps
               {com.stuartsierra/class-diagram
@@ -119,7 +119,7 @@
                {:local/root "/Users/andy/clj/forks/class-diagram"}}}
 
   :uber {:extra-deps
-         {ubergraph
+         {ubergraph/ubergraph
           {:mvn/version "0.8.2"
            :exclusions [tailrecursion/cljs-priority-map]}
           ;; Version 0.8.2 plus more extensive doc strings by me
@@ -130,7 +130,7 @@
   :data {:extra-deps {
                       ;; (require '[medley.core :as med])
                       ;; https://github.com/weavejester/medley
-                      medley {:mvn/version "1.2.0"}
+                      medley/medley {:mvn/version "1.2.0"}
 
                       ;; (require '[clojure.tools.reader.edn :as tredn])
                       ;; (tredn/read ...)
@@ -148,7 +148,7 @@
                       org.flatland/useful {:mvn/version "0.11.6"}
 
                       ;; https://github.com/cloojure/tupelo
-                      tupelo {:mvn/version "0.9.188"}
+                      tupelo/tupelo {:mvn/version "0.9.188"}
 
                       ;; https://github.com/clojure/data.json
                       ;; (require '[clojure.data.json :as json])
@@ -156,7 +156,7 @@
                       
                       ;; (require '[cheshire.core :as chesh])
                       ;; https://github.com/dakrone/cheshire
-                      cheshire {:mvn/version "5.9.0"}
+                      cheshire/cheshire {:mvn/version "5.9.0"}
 
                       ;; https://github.com/mmcgrana/clj-json
                       ;; (require '[clj-json.core :as cjson])
@@ -176,7 +176,7 @@
 
                       ;; (require '[semantic-csv.core :as scsv])
                       ;; https://github.com/metasoarous/semantic-csv
-                      semantic-csv {:mvn/version "0.2.1-alpha1"}
+                      semantic-csv/semantic-csv {:mvn/version "0.2.1-alpha1"}
 
                       }}
   ;;   :deps {:extra-deps {org.clojure/tools.deps.alpha {:mvn/version "0.7.541"}}}
@@ -185,13 +185,13 @@
             :main-opts ["-m" "datomic.ion.dev"]}
 
   ;; (require '[criterium.core :as crit])
-  :profile {:extra-deps {criterium {:mvn/version "0.4.6"}
+  :profile {:extra-deps {criterium/criterium {:mvn/version "0.4.6"}
                          com.clojure-goes-fast/clj-async-profiler {:mvn/version "0.4.0"}}}
 
   ;; Extra dependencies for decompiling/disassembling
   :decompile {:extra-deps {com.clojure-goes-fast/clj-java-decompiler {:mvn/version "0.3.0"}
-                           nodisassemble {:mvn/version "0.1.3"}
-                           lein-nodisassemble {:mvn/version "0.1.3"}}}
+                           nodisassemble/nodisassemble {:mvn/version "0.1.3"}
+                           lein-nodisassemble/lein-nodisassemble {:mvn/version "0.1.3"}}}
   }
  
  ;; Provider attributes
