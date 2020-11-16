@@ -114,6 +114,10 @@
                                     :sha "ff33d97f8375b4a0aaf758295e0aef7185ef9d6e"
                                     }}}
 
+  :clj-classes {:extra-deps {com.github.jafingerhut/class-diagram {:git/url "https://github.com/jafingerhut/clojure-classes"
+                                                                   :sha "6679e370e4f7b4ee23e5417ffcffec13e531650f"
+                                                                   }}}
+
   ;; (require '[clj-memory-meter.core :as mm])
   ;; (mm/measure "Hello, world!")
   ;; On my macOS 10.14.6 system, mm/measure calls failed unless I
