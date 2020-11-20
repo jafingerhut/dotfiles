@@ -19,8 +19,8 @@ do
     echo $j
     /bin/cp $j $j.orig
     # --pad-first-paren-out seems to add space before a left paren
-    #that surrounds the parameters of a method call, too, but I do not
-    #want that.
+    # that surrounds the parameters of a method call, too, but I do not
+    # want that.
     #astyle --style=java --pad-first-paren-out $j
     astyle --style=java $j
     set -x
