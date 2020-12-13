@@ -107,16 +107,17 @@
   {:jvm-opts ["-Dclojure.server.repl={:port,50505,:accept,clojure.core.server/repl}"
               "-Dclojure.server.repl={:port,60606,:accept,clojure.core.server/repl}"]}
 
-;;  :cljol {:extra-deps {cljol/cljol {:local/root "/Users/andy/clj/cljol"}
-;;                       org.clojure/clojure {:mvn/version "1.7.0"}}}
-  :cljol {:extra-deps {cljol/cljol {:git/url "https://github.com/jafingerhut/cljol"
-                                    ;;:sha "bb5549e9832e73e4a9fc5dfdf695c48e797729fa"
-                                    :sha "ff33d97f8375b4a0aaf758295e0aef7185ef9d6e"
-                                    }}}
+  :cljol {:extra-deps
+          {cljol/cljol {:git/url "https://github.com/jafingerhut/cljol"
+                        ;;:sha "ff33d97f8375b4a0aaf758295e0aef7185ef9d6e"
+                        :sha "4365b938582cf8e3b93e3e56eb3363a13bf2df59"
+                        }}}
 
-  :clj-classes {:extra-deps {com.github.jafingerhut/class-diagram {:git/url "https://github.com/jafingerhut/clojure-classes"
-                                                                   :sha "6679e370e4f7b4ee23e5417ffcffec13e531650f"
-                                                                   }}}
+  :clj-classes {:extra-deps
+                {com.github.jafingerhut/class-diagram
+                 {:git/url "https://github.com/jafingerhut/clojure-classes"
+                  :sha "29a63be182910336061dc926ca78be71e1556491"
+                  }}}
 
   ;; (require '[clj-memory-meter.core :as mm])
   ;; (mm/measure "Hello, world!")
@@ -201,6 +202,9 @@
   ;; (require '[criterium.core :as crit])
   :profile {:extra-deps {criterium/criterium {:mvn/version "0.4.6"}
                          com.clojure-goes-fast/clj-async-profiler {:mvn/version "0.4.0"}}}
+
+  :collection-check {:extra-deps
+                     {collection-check/collection-check {:mvn/version "0.1.7"}}}
 
   ;; Extra dependencies for decompiling/disassembling
   :decompile {:extra-deps {com.clojure-goes-fast/clj-java-decompiler {:mvn/version "0.3.0"}
