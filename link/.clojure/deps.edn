@@ -109,15 +109,12 @@
 
   :cljol {:extra-deps
           {cljol/cljol {:git/url "https://github.com/jafingerhut/cljol"
-                        ;;:sha "ff33d97f8375b4a0aaf758295e0aef7185ef9d6e"
-                        :sha "4365b938582cf8e3b93e3e56eb3363a13bf2df59"
-                        }}}
+                        :sha "11d4aa72fdd19248bd7600fb7b5cde7189f32938"}}}
 
   :clj-classes {:extra-deps
                 {com.github.jafingerhut/class-diagram
                  {:git/url "https://github.com/jafingerhut/clojure-classes"
-                  :sha "29a63be182910336061dc926ca78be71e1556491"
-                  }}}
+                  :sha "29a63be182910336061dc926ca78be71e1556491"}}}
 
   ;; (require '[clj-memory-meter.core :as mm])
   ;; (mm/measure "Hello, world!")
