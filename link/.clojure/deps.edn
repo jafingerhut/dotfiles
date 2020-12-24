@@ -109,7 +109,7 @@
 
   :cljol {:extra-deps
           {cljol/cljol {:git/url "https://github.com/jafingerhut/cljol"
-                        :sha "36c45f741fc64db248020aeb155f1f0f24f95dd9"}}}
+                        :sha "dc17a8e02f5abf7aacf6c1962c627fe7b19993d0"}}}
 
   :clj-classes {:extra-deps
                 {com.github.jafingerhut/class-diagram
