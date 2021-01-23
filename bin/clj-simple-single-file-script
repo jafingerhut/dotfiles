@@ -23,11 +23,41 @@
 ;; *command-line-args*
 
 ;;(println "(class *command-line-args*)=" (class *command-line-args*))
+(println "*file*=" *file*)
 (println (count *command-line-args*) "command line args were given:")
 (doall (map-indexed (fn [idx arg]
                       (printf "%2d: '%s'\n" idx arg))
                     *command-line-args*))
 
+(println)
+(println "values of some other Clojure Vars that may or may not be of interest:")
+(println "*allow-unresolved-vars*=" *allow-unresolved-vars*)
+(println "*clojure-version*=" *clojure-version*)
+(println "*compile-files*=" *compile-files*)
+(println "*compile-path*=" *compile-path*)
+(println "*compiler-options*=" *compiler-options*)
+(println "*data-readers*=" *data-readers*)
+(println "*default-data-reader-fn*=" *default-data-reader-fn*)
+(println "*flush-on-newline*=" *flush-on-newline*)
+(println "*fn-loader*=" *fn-loader*)
+(println "*in*=" *in*)
+(println "*math-context*=" *math-context*)
+(println "*ns*=" *ns*)
+(println "*out*=" *out*)
+(println "*print-dup*=" *print-dup*)
+(println "*print-length*=" *print-length*)
+(println "*print-level*=" *print-level*)
+(println "*print-meta*=" *print-meta*)
+(println "*print-namespace-maps*=" *print-namespace-maps*)
+(println "*print-readably*=" *print-readably*)
+(println "*read-eval*=" *read-eval*)
+(println "*reader-resolver*=" *reader-resolver*)
+(println "*use-context-classloader*=" *use-context-classloader*)
+(println "*warn-on-reflection*=" *warn-on-reflection*)
+
+(println)
+(println "Attempt to run 'openssl md5 <filename>' on command line args:")
+(println)
 ;; One way to invoke commands is to use clojure.java.shell/sh
 ;; One can also use Java ProcessBuilder APIs:
 ;; https://docs.oracle.com/javase/7/docs/api/java/lang/ProcessBuilder.html
