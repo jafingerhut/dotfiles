@@ -79,7 +79,8 @@
 ;; Strange.  765 from the left seems to work well when the
 ;; built-in-desktop is set to 2880x1800 resolution, but I would guess
 ;; that Xquartz is using larger pixels than that.
-(defvar x-windows-default-frame-left-val (if osx-p 765 -5))
+;(defvar x-windows-default-frame-left-val (if osx-p 765 -5))
+(defvar x-windows-default-frame-left-val 0)
 (defvar andy-emacs-font (getenv "ANDY_EMACS_FONT"))
 (defvar x-windows-font (cond (andy-emacs-font andy-emacs-font)
                              (t "8x13")))
@@ -129,7 +130,7 @@
     (setq mac-command-modifier 'meta)
     (setq default-frame-alist
 	  (append default-frame-alist
-		  '((top . 0) (left . -10)
+		  '((top . 0) (left . 0)
 		    (width . 80) (height . 60)
 		    ;;(font . "-*-Courier-normal-r-*-*-15-97-*-*-c-*-*-ansi-")
 		    ;;(font . "-*-Courier-normal-r-*-*-15-50-*-*-c-*-*-ansi-")
