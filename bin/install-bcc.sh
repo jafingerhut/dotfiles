@@ -58,6 +58,11 @@ then
 elif [ "${distributor_id}" = "Ubuntu" -a "${ubuntu_release}" = "20.04" ]
 then
     sudo apt install -y bison build-essential cmake flex git libedit-dev libllvm7 llvm-7-dev libclang-7-dev python zlib1g-dev libelf-dev libfl-dev
+    # This was not in the instructions, but when I tried running this
+    # script on a minimal installation of Ubuntu 20.04 system, it
+    # failed when running a Python3 script at the line:
+    #     from distutils.core import setup
+    sudo apt-get --yes install python3-distutils
 else
     sudo apt-get --yes install bison build-essential cmake flex git libedit-dev libllvm3.7 llvm-3.7-dev libclang-3.7-dev python zlib1g-dev libelf-dev
 fi
