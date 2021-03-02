@@ -52,7 +52,7 @@ then
     # script on a minimal installation of Ubuntu 18.04 system, it
     # failed when running a Python3 script at the line:
     #     from distutils.core import setup
-    suto apt-get --yes install python3-distutils
+    sudo apt-get --yes install python3-distutils
 else
     sudo apt-get --yes install bison build-essential cmake flex git libedit-dev libllvm3.7 llvm-3.7-dev libclang-3.7-dev python zlib1g-dev libelf-dev
 fi
