@@ -56,6 +56,7 @@ then
     #     from distutils.core import setup
     sudo apt-get --yes install python3-distutils
 elif [ "${distributor_id}" = "Ubuntu" -a "${ubuntu_release}" = "20.04" ]
+then
     sudo apt install -y bison build-essential cmake flex git libedit-dev libllvm7 llvm-7-dev libclang-7-dev python zlib1g-dev libelf-dev libfl-dev
 else
     sudo apt-get --yes install bison build-essential cmake flex git libedit-dev libllvm3.7 llvm-3.7-dev libclang-3.7-dev python zlib1g-dev libelf-dev
