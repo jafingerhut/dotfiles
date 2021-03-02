@@ -1,0 +1,14 @@
+#! /bin/bash
+
+# On an Ubuntu 18.04 Linux system where you have installed BCC (the
+# BPF Compiler Collection) using the instructions to compile it from
+# source code, and the executables were installed in
+# /usr/share/bcc/tools
+
+# Options used:
+
+# -t include a timestamp column
+# -x include failed exec()s
+# --max-args 100 Maximum number of arguments parsed and displayed, defaults to 20
+
+exec /usr/share/bcc/tools/execsnoop -t -x --max-args 100

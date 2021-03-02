@@ -1,0 +1,13 @@
+#! /bin/bash
+
+# On an Ubuntu 18.04 Linux system where you have installed BCC (the
+# BPF Compiler Collection) using the instructions to compile it from
+# source code, and the executables were installed in
+# /usr/share/bcc/tools
+
+# Options used:
+
+# -T include a timestamp column
+# -U print UID column
+
+exec /usr/share/bcc/tools/opensnoop -T -U | egrep -v '\b(irqbalance|dbus-daemon|gnome-shell|nautilus-deskto|gsd-housekeepin|gsd-color|vminfo|upowerd)\b'
