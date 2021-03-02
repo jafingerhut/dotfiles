@@ -48,6 +48,11 @@ fi
 if [ "${distributor_id}" = "Ubuntu" -a "${ubuntu_release}" = "18.04" ]
 then
     sudo apt-get --yes install bison build-essential cmake flex git libedit-dev libllvm6.0 llvm-6.0-dev libclang-6.0-dev python zlib1g-dev libelf-dev
+    # This was not in the instructions, but when I tried running this
+    # script on a minimal installation of Ubuntu 18.04 system, it
+    # failed when running a Python3 script at the line:
+    #     from distutils.core import setup
+    suto apt-get --yes install python3-distutils
 else
     sudo apt-get --yes install bison build-essential cmake flex git libedit-dev libllvm3.7 llvm-3.7-dev libclang-3.7-dev python zlib1g-dev libelf-dev
 fi
