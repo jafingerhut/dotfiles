@@ -15,8 +15,10 @@ THIS_SCRIPT_DIR_MAYBE_RELATIVE="${THIS_SCRIPT_FILE_MAYBE_RELATIVE%/*}"
 THIS_SCRIPT_DIR_ABSOLUTE=`readlink -f "${THIS_SCRIPT_DIR_MAYBE_RELATIVE}"`
 
 ubuntu_version_warning() {
-    1>&2 echo "This software has only been tested on Ubuntu 16.04 and"
-    1>&2 echo "18.04."
+    1>&2 echo "This software has only been tested on:"
+    1>&2 echo ""
+    1>&2 echo "    Ubuntu 18.04"
+    1>&2 echo "    Ubuntu 20.04"
     1>&2 echo ""
     1>&2 echo "Proceed installing manually at your own risk of"
     1>&2 echo "significant time spent figuring out how to make it all"
@@ -34,7 +36,7 @@ fi
 
 distributor_id=`lsb_release -si`
 ubuntu_release=`lsb_release -s -r`
-if [ "${distributor_id}" = "Ubuntu" -a \( "${ubuntu_release}" = "16.04" -o "${ubuntu_release}" = "18.04" \) ]
+if [ "${distributor_id}" = "Ubuntu" -a \( "${ubuntu_release}" = "18.04" -o "${ubuntu_release}" = "20.04" \) ]
 then
     echo "Found distributor '${distributor_id}' release '${ubuntu_release}'.  Continuing with installation."
 else
@@ -53,6 +55,8 @@ then
     # failed when running a Python3 script at the line:
     #     from distutils.core import setup
     sudo apt-get --yes install python3-distutils
+elif [ "${distributor_id}" = "Ubuntu" -a "${ubuntu_release}" = "20.04" ]
+    sudo apt install -y bison build-essential cmake flex git libedit-dev libllvm7 llvm-7-dev libclang-7-dev python zlib1g-dev libelf-dev libfl-dev
 else
     sudo apt-get --yes install bison build-essential cmake flex git libedit-dev libllvm3.7 llvm-3.7-dev libclang-3.7-dev python zlib1g-dev libelf-dev
 fi
