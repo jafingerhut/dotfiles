@@ -17,6 +17,7 @@ THIS_SCRIPT_DIR_ABSOLUTE=`readlink -f "${THIS_SCRIPT_DIR_MAYBE_RELATIVE}"`
 ubuntu_version_warning() {
     1>&2 echo "This software has only been tested on:"
     1>&2 echo ""
+    1>&2 echo "    Ubuntu 16.04"
     1>&2 echo "    Ubuntu 18.04"
     1>&2 echo "    Ubuntu 20.04"
     1>&2 echo ""
@@ -36,18 +37,8 @@ fi
 
 distributor_id=`lsb_release -si`
 ubuntu_release=`lsb_release -s -r`
-if [ "${distributor_id}" = "Ubuntu" -a \( "${ubuntu_release}" = "18.04" -o "${ubuntu_release}" = "20.04" \) ]
-then
-    echo "Found distributor '${distributor_id}' release '${ubuntu_release}'.  Continuing with installation."
-else
-    ubuntu_version_warning
-    1>&2 echo ""
-    1>&2 echo "Here is what command 'lsb_release -a' shows this OS to be:"
-    lsb_release -a
-    exit 1
-fi
 
-if [ "${distributor_id}" = "Ubuntu" -a "${ubuntu_release}" = "18.04" ]
+if [ "${distributor_id}" = "Ubuntu" -a \( "${ubuntu_release}" = "16.04" -o "${ubuntu_release}" = "18.04" \) ]
 then
     sudo apt-get --yes install bison build-essential cmake flex git libedit-dev libllvm6.0 llvm-6.0-dev libclang-6.0-dev python zlib1g-dev libelf-dev
     # This was not in the instructions, but when I tried running this
@@ -64,7 +55,11 @@ then
     #     from distutils.core import setup
     sudo apt-get --yes install python3-distutils
 else
-    sudo apt-get --yes install bison build-essential cmake flex git libedit-dev libllvm3.7 llvm-3.7-dev libclang-3.7-dev python zlib1g-dev libelf-dev
+    ubuntu_version_warning
+    1>&2 echo ""
+    1>&2 echo "Here is what command 'lsb_release -a' shows this OS to be:"
+    lsb_release -a
+    exit 1
 fi
 
 git clone https://github.com/iovisor/bcc.git
