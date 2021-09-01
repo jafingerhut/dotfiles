@@ -1,9 +1,4 @@
-#! /usr/bin/env python
-
-# If you don't know whether Python 3 is first in your cmd path
-#### #!/router/bin/python-3.4.0
-# If you do know Python 3 is first in your cmd path
-#### `#! /bin/env python
+#! /usr/bin/env python3
 
 import os, sys
 import re
