@@ -1,6 +1,12 @@
 # Editing
 
-alias vi=vim
+if is_fedora
+then
+    # No alias for vi on Fedora, since at least for Fedora 34, vi is vim
+    echo -n ""
+else
+    alias vi=vim
+fi
 
 if [ -x "/Applications/Emacs.app/Contents/MacOS/Emacs" ]
 then
