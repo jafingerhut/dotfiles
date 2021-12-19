@@ -27,14 +27,17 @@ then
     # exists on Cisco Enterprise Linux machines.
     export EMACS="/router/bin/emacs-24.5"
 else
-    export EMACS="emacs"
+    export EMACS=`which emacs`
 fi
 
 # Override default Emacs font in my init.el if I am running on a machine
 # with 'linwin' as part of the name.  I plan to use that as part of the
 # name for Linux VMs I create on a Windows machine where this font size
 # works better for my viewing.
-if [[ `uname -n` == *"linwin"* ]]
+if is_fedora
+then
+    export ANDY_EMACS_FONT="Liberation Mono:pixelsize=15:foundry=1ASC:weight=normal:slant=normal:width=normal:spacing=100:scalable=true"
+elif [[ `uname -n` == *"linwin"* ]]
 then
     export ANDY_EMACS_FONT="10x20"
 fi

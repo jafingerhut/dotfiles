@@ -209,6 +209,39 @@
 ;;; Remove ".log" from the list of ignored extensions, since I use it
 ;;; quite often as the extension for dc_shell output files.
 
+;;; The following commented-out block of code was a preliminary
+;;; attempt at eliminating the warning "Package cl is deprecated" when
+;;; using this file with Emacs 27.  However, it seems I have multiple
+;;; packages I use at particular older versions right now that also
+;;; use the cl package, so eliminating its minor use here does not
+;;; remove that warning -- it would require updating all of those
+;;; older packages to ones that do not use the cl package to get rid
+;;; of the warning, probably.  I do not wish to spend time doing that
+;;; right now, but want to leave this code commented out in case it
+;;; helps me make progress towards that goal in the future.
+
+;;; (cond
+;;;  ((>= emacs-major-version 27)
+;;;   (require 'cl-lib)
+;;; ;;  (defun my-remove (elem list)
+;;; ;;    (cl-remove elem list ':test 'equal))
+;;;   )
+;;;  (t
+;;; ;;  (require 'cl)
+;;; ;;  (defun my-remove (elem list)
+;;; ;;    (remove* elem list ':test 'equal))
+;;;   ))
+;;;
+;;; (defun my-remove (elem lst)
+;;;   (cond
+;;;    ((>= emacs-major-version 27)
+;;;     (cl-remove elem lst ':test 'equal))
+;;;    (t
+;;;     (remove* elem lst ':test 'equal))))
+;;;
+;;; (setq completion-ignored-extensions
+;;;       (my-remove ".log" completion-ignored-extensions))
+
 (require 'cl)
 
 (setq completion-ignored-extensions
