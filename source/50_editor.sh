@@ -39,6 +39,15 @@ then
     export ANDY_EMACS_FONT="10x20"
 fi
 
+if is_fedora
+then
+    # At least when I tried to use Emacs27 on Fedora 34, it could not
+    # use the default DISPLAY environment variable vlaue of
+    # 'wayland-0', but the default value of GNOME_SETUP_DISPLAY
+    # worked.
+    export EMACS="DISPLAY=${GNOME_SETUP_DISPLAY} $EMACS"
+fi
+
 export EDITOR="${EMACS}"
 export VISUAL="${EDITOR}"
 alias e="${EDITOR}"
