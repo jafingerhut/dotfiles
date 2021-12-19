@@ -49,6 +49,7 @@ function is_fedora() {
   [[ "$(cat /etc/fedora-release 2> /dev/null)" =~ Fedora ]] || return 1
 }
 function get_os() {
+  local os
   for os in osx ubuntu fedora; do
     is_$os; [[ $? == ${1:-0} ]] && echo $os
   done
