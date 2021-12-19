@@ -45,8 +45,11 @@ function is_osx() {
 function is_ubuntu() {
   [[ "$(cat /etc/issue 2> /dev/null)" =~ Ubuntu ]] || return 1
 }
+function is_fedora() {
+  [[ "$(cat /etc/fedora-release 2> /dev/null)" =~ Fedora ]] || return 1
+}
 function get_os() {
-  for os in osx ubuntu; do
+  for os in osx ubuntu fedora; do
     is_$os; [[ $? == ${1:-0} ]] && echo $os
   done
 }
@@ -275,11 +278,15 @@ if [[ ! "$(type -P gcc)" ]] && is_osx; then
   exit 1
 fi
 
-# If Git is not installed, install it (Ubuntu only, since Git comes standard
-# with recent XCode or CLT)
+# If Git is not installed, install it (Ubuntu or Fedora only, since
+# Git comes standard with recent XCode or CLT)
 if [[ ! "$(type -P git)" ]] && is_ubuntu; then
   e_header "Installing Git"
   sudo apt-get -qq install git-core
+fi
+if [[ ! "$(type -P git)" ]] && is_fedora; then
+  e_header "Installing Git"
+  sudo dnf install git
 fi
 
 # If Git isn't installed by now, something exploded. We gots to quit!
