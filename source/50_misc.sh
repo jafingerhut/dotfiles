@@ -34,6 +34,9 @@ alias fwf='find . \! -type d -a -perm -200 -ls'
 
 # fnd - find non-directory files
 alias fnd='find . \! -type d'
+# fnd0 - find non-directory files with null char as separator, to properly
+# handle file names with white space in them.
+alias fnd0='find . \! -type d -print0'
 
 #       make mv, cp ask before over writing, and rm ask before removing
 alias mv='mv -i'
