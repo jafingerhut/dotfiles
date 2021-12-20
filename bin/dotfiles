@@ -53,6 +53,7 @@ function get_os() {
   for os in osx ubuntu fedora; do
     is_$os; [[ $? == ${1:-0} ]] && echo $os
   done
+  echo "unknown"
 }
 
 # Remove an entry from $PATH
