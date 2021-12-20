@@ -50,10 +50,14 @@ function is_fedora() {
 }
 function get_os() {
   local os
+  local found_match=0
   for os in osx ubuntu fedora; do
-    is_$os; [[ $? == ${1:-0} ]] && echo $os
+    is_$os; [[ $? == ${1:-0} ]] && echo $os && found_match=1
   done
-  echo "unknown"
+  if [[ "$found_match" == 0 ]]
+  then
+      echo "unknown"
+  fi
 }
 
 # Remove an entry from $PATH
