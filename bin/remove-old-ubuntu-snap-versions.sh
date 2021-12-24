@@ -18,6 +18,9 @@ LANG=en_US.UTF-8 snap list --all | awk '/disabled/{print $1, $3}' |
         sudo snap remove "$snapname" --revision="$revision"
     done
 sudo rm -rf /var/lib/snapd/cache/*
+sudo apt clean
+sudo apt autoremove
+sudo apt clean
 AFTER=`df -BM .`
 echo "Before: $BEFORE"
 echo "After:  $AFTER"
