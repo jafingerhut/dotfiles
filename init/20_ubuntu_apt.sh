@@ -42,6 +42,7 @@ packages=(
 #  ansible
   build-essential
 #  cowsay
+  dos2unix
   git-core
 #  htop
 #  id3tool
