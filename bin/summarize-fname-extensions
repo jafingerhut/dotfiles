@@ -22,6 +22,21 @@ character in the file name, if any.
 Print a table of how many times each extension is found.
     """ % (progname))
 
+
+def limited_fnames(fname_lst, max_to_show):
+    num_to_show = len(fname_lst)
+    num_not_shown = 0
+    if num_to_show > max_to_show:
+        num_not_shown = num_to_show - max_to_show
+        num_to_show = max_to_show
+    ret = ' '.join(fname_lst[0:num_to_show])
+    if num_not_shown != 0:
+        ret += (' (%d more)' % (num_not_shown))
+    return ret
+
+
+max_fnames_to_show = 3
+
 path = os.environ['PATH']
 if len(sys.argv) > 1:
     if sys.argv[1] == '-h':
@@ -30,26 +45,30 @@ if len(sys.argv) > 1:
     path = sys.argv[1]
 
 
-extension_count = collections.defaultdict(int)
 fnames_with_extension = collections.defaultdict(list)
-nodot = 0
 
+nfiles = 0
 for fname in fileinput.input():
+    nfiles += 1
     fname = fname.rstrip()
     match = re.search(r"\.([^./]*)$", fname)
     if match:
         extension = match.group(1)
-        extension_count[extension] += 1
-        fnames_with_extension[extension].append(fname)
     else:
-        nodot += 1
+        extension = ''
+    fnames_with_extension[extension].append(fname)
 
+for extension in sorted(fnames_with_extension.keys(),
+                        key=lambda ext: len(fnames_with_extension[ext])):
+    if extension == '':
+        continue
+    fnames = ' ' + limited_fnames(fnames_with_extension[extension],
+                                  max_fnames_to_show)
+    print("%5u '%s'%s" % (len(fnames_with_extension[extension]), extension,
+                          fnames))
+nodot = len(fnames_with_extension[''])
 if nodot != 0:
-    print('%5u no dot in filename' % (nodot))
-for extension in sorted(extension_count.keys(),
-                        key=lambda ext: extension_count[ext],
-                        reverse=True):
-    fnames = ''
-    if extension_count[extension] <= 2:
-        fnames = ' ' + ' '.join(fnames_with_extension[extension])
-    print("%5u '%s'%s" % (extension_count[extension], extension, fnames))
+    print('%5u no dot in filename: %s'
+          '' % (nodot, limited_fnames(fnames_with_extension[''],
+                                      max_fnames_to_show)))
+print('%5u files total' % (nfiles))
