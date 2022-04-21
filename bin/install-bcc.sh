@@ -67,7 +67,9 @@ fi
 
 git clone https://github.com/iovisor/bcc.git
 cd bcc
-git checkout v0.24.0
+# Failed tag attempts on Ubuntu 20.04
+# v0.24.0
+git checkout v0.23.0
 cd ..
 mkdir bcc/build
 cd bcc/build
