@@ -38,8 +38,10 @@ fi
 distributor_id=`lsb_release -si`
 ubuntu_release=`lsb_release -s -r`
 
+set -x
 if [ "${distributor_id}" = "Ubuntu" -a \( "${ubuntu_release}" = "16.04" -o "${ubuntu_release}" = "18.04" \) ]
 then
+    echo "Installing packages for Ubuntu 16.04, 18.04"
     sudo apt-get --yes install bison build-essential cmake flex git libedit-dev libllvm6.0 llvm-6.0-dev libclang-6.0-dev python zlib1g-dev libelf-dev
     # This was not in the instructions, but when I tried running this
     # script on a minimal installation of Ubuntu 18.04 system, it
@@ -48,7 +50,8 @@ then
     sudo apt-get --yes install python3-distutils
 elif [ "${distributor_id}" = "Ubuntu" -a "${ubuntu_release}" = "20.04" ]
 then
-    sudo apt install -y bison build-essential cmake flex git libedit-dev libllvm7 llvm-7-dev libclang-7-dev python zlib1g-dev libelf-dev libfl-dev
+    echo "Installing packages for Ubuntu 20.04"
+    sudo apt install -y bison build-essential cmake flex git libedit-dev libllvm7 llvm-7-dev libclang-7-dev python3 zlib1g-dev libelf-dev libfl-dev
     # This was not in the instructions, but when I tried running this
     # script on a minimal installation of Ubuntu 20.04 system, it
     # failed when running a Python3 script at the line:
@@ -63,6 +66,9 @@ else
 fi
 
 git clone https://github.com/iovisor/bcc.git
+cd bcc
+git checkout v0.24.0
+cd ..
 mkdir bcc/build
 cd bcc/build
 cmake ..
