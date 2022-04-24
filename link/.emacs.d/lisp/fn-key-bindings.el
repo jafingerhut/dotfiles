@@ -116,7 +116,10 @@ always be preferred over `comint-send-string`.  It delegates to
 `comint-simple-send` so it always appends a newline at the end of
 the string for evaluation.  Refer to `comint-simple-send` for
 customizations."
-  (inf-clojure--set-repl-type proc)
+  ;; This used to be defined in a 20190531.1511 version of inf-clojure
+  ;; that I ws using, but is not defined in inf-clojure version
+  ;; 20220421.559.
+  ;;(inf-clojure--set-repl-type proc)
   (let ((sanitized (inf-clojure--sanitize-command string)))
     (inf-clojure--log-string sanitized "----CMD->")
     (comint-echo-and-send-string proc (concat string "\n"))))

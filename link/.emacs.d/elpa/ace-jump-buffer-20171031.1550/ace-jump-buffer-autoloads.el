@@ -1,11 +1,14 @@
 ;;; ace-jump-buffer-autoloads.el --- automatically extracted autoloads
 ;;
 ;;; Code:
-(add-to-list 'load-path (or (file-name-directory #$) (car load-path)))
+
+(add-to-list 'load-path (directory-file-name
+                         (or (file-name-directory #$) (car load-path))))
+
 
-;;;### (autoloads nil "ace-jump-buffer" "ace-jump-buffer.el" (23504
-;;;;;;  2697 154932 144000))
-;;; Generated autoloads from ace-jump-buffer.el
+;;;### (autoloads nil "ace-jump-buffer" "../../../../../.emacs.d/elpa/ace-jump-buffer-20171031.1550/ace-jump-buffer.el"
+;;;;;;  "988286c8860463c3b82e39fe525f2852")
+;;; Generated autoloads from ../../../../../.emacs.d/elpa/ace-jump-buffer-20171031.1550/ace-jump-buffer.el
 
 (autoload 'ace-jump-buffer "ace-jump-buffer" "\
 Quickly hop to buffer with `avy'.
@@ -35,7 +38,22 @@ It will displays buffers that don't get rejected by the body of
 
 \(fn NAME &rest BUFFER-LIST-REJECT-FILTER)" nil t)
 
-(put 'make-ace-jump-buffer-function 'lisp-indent-function '1)
+(function-put 'make-ace-jump-buffer-function 'lisp-indent-function '1)
+
+;;;### (autoloads "actual autoloads are elsewhere" "ace-jump-buffer"
+;;;;;;  "../../../../../.emacs.d/elpa/ace-jump-buffer-20171031.1550/ace-jump-buffer.el"
+;;;;;;  (0 0 0 0))
+;;; Generated autoloads from ../../../../../.emacs.d/elpa/ace-jump-buffer-20171031.1550/ace-jump-buffer.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "ace-jump-buffer" '("ajb" "bs--sort-by-recentf")))
+
+;;;***
+
+;;;***
+
+;;;### (autoloads nil nil ("../../../../../.emacs.d/elpa/ace-jump-buffer-20171031.1550/ace-jump-buffer-autoloads.el"
+;;;;;;  "../../../../../.emacs.d/elpa/ace-jump-buffer-20171031.1550/ace-jump-buffer.el")
+;;;;;;  (0 0 0 0))
 
 ;;;***
 
@@ -43,5 +61,6 @@ It will displays buffers that don't get rejected by the body of
 ;; version-control: never
 ;; no-byte-compile: t
 ;; no-update-autoloads: t
+;; coding: utf-8
 ;; End:
 ;;; ace-jump-buffer-autoloads.el ends here
