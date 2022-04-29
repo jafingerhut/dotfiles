@@ -58,15 +58,26 @@ packages=(
   xdu
 )
 
+install_emacs26_from_kelleyk_ppa=0
 ubuntu_release=`lsb_release -s -r`
 if [[ "${ubuntu_release}" > "19" ]]
 then
     packages+=(emacs-gtk)
 elif [[ "${ubuntu_release}" > "18" ]]
 then
-    packages+=(emacs25)
+    install_emacs26_from_kelleyk_ppa=1
 else
     packages+=(emacs24)
+fi
+
+if [ "${install_emacs26_from_kelleyk_ppa}" == 1 ]
+then
+    # In 2022-Apr I found instructions on this page that enabled me to
+    # successfully install Emacs v26 on Ubuntu 18.04
+    # https://www.reddit.com/r/emacs/comments/8pcw5a/what_is_the_most_painless_way_to_install_emacs_26/
+    sudo add-apt-repository ppa:kelleyk/emacs
+    sudo apt-get update
+    sudo apt install emacs26
 fi
 
 packages=($(setdiff "${packages[*]}" "$(dpkg --get-selections | grep -v deinstall | awk '{print $1}')"))
