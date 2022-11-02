@@ -48,14 +48,14 @@ packages=(
 #  id3tool
 #  libssl-dev
   mate-terminal
-  silversearcher-ag
-  sshfs
+#  silversearcher-ag
+#  sshfs
   synaptic
-  telnet
+#  telnet
   tree
   vim
   xdiskusage
-  xdu
+#  xdu
 )
 
 install_emacs26_from_kelleyk_ppa=0
