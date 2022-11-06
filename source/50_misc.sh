@@ -46,6 +46,7 @@ alias rm='rm -i'
 alias ds='dirs -v'
 #alias x=exit
 alias du='du -k'
+alias duss='du -s * .??* | sort -n'
 alias hd='hexdump -C'
 if [ -x /usr/ucb/ps ]
 then
