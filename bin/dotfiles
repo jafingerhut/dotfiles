@@ -48,10 +48,13 @@ function is_ubuntu() {
 function is_fedora() {
   [[ "$(cat /etc/fedora-release 2> /dev/null)" =~ Fedora ]] || return 1
 }
+function is_windows() {
+  [[ "$OSTYPE" =~ ^msys ]] || return 1
+}
 function get_os() {
   local os
   local found_match=0
-  for os in osx ubuntu fedora; do
+  for os in osx ubuntu fedora windows; do
     is_$os; [[ $? == ${1:-0} ]] && echo $os && found_match=1
   done
   if [[ "$found_match" == 0 ]]
