@@ -14,6 +14,10 @@ for line in fileinput.input('/var/lib/dpkg/status'):
     line = line.rstrip()
     # Blank lines separate info about different packages
     if line == '':
+        if 'installed_size' not in pkg:
+            pkg['installed_size'] = 0
+        if ('name' not in pkg):
+            print('problem with pkg=%s' % (pkg))
         assert pkg['name'] is not None and pkg['installed_size'] is not None
         pkgs.append(pkg)
         pkg = {}
