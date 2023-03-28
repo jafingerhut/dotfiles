@@ -51,12 +51,176 @@ nfiles = 0
 for fname in fileinput.input():
     nfiles += 1
     fname = fname.rstrip()
-    match = re.search(r"\.([^./]*)$", fname)
+    extension = None
+    # Make a special case for files that contain "readme", case-insensitive match, anywhere in their names, regardless of suffix.
+    match = re.search(r"[rR][eE][aA][dD][mM][eE]", fname)
     if match:
-        extension = match.group(1)
-    else:
-        extension = ''
+        extension = 'readme'
+    # Make a special case for files that contain "makefile", case-insensitive match, anywhere in their names, regardless of suffix.
+    match = re.search(r"[mM][aA][kK][eE][fF][iI][lL][eE]", fname)
+    if match:
+        extension = 'makefile'
+    if extension is None:
+        match = re.search(r"\.([^./]*)$", fname)
+        if match:
+            extension = match.group(1)
+        else:
+            extension = ''
     fnames_with_extension[extension].append(fname)
+
+# Quick extension to file type guess, which is sometimes inaccurate
+extension_category = {
+    'bz2': 'archive',
+    'gz': 'archive',
+    'jar': 'archive',
+    'tar': 'archive',
+    'tgz': 'archive',
+    'xz': 'archive',
+    'zip': 'archive',
+    '7z': 'archive',
+    'whl': 'archive-python',
+    'readme': 'document-text',
+    'html': 'document-text',
+    'htm': 'document-text',
+    'css': 'document-text',
+    'txt': 'document-text',
+    'TXT': 'document-text',
+    'rst': 'document-text',
+    'md': 'document-text',
+    'adoc': 'document-text',
+    'rtf': 'document-text',
+    'man': 'document-text',
+    'tex': 'document-text',
+    'lyx': 'document-text',
+    'doc': 'document-binary',
+    'docx': 'document-binary',
+    'DOC': 'document-binary',
+    'xls': 'document-binary',
+    'xlsx': 'document-binary',
+    'ppt': 'document-binary',
+    'pptx': 'document-binary',
+    'pdf': 'document-binary',
+    'odp': 'document-binary',
+    'ps': 'document-binary',
+    'csv': 'data-text',
+    'json': 'data-text',
+    'yaml': 'data-text',
+    'yml': 'data-text',
+    'xml': 'data-text',
+    'plist': 'data-text',
+    'wxs': 'data-text',
+    'dtd': 'data-text',
+    'xsl': 'data-text',
+    'xsd': 'data-text',
+    'dot': 'data-text',
+    'graphml': 'data-text',
+    'yang': 'data-text',
+    'pcap': 'data-binary',
+    'md5': 'crypto',
+    'pem': 'crypto',
+    'crt': 'crypto',
+    'enc': 'crypto',
+    'csr': 'crypto',
+    'sha224': 'crypto',
+    'sha384': 'crypto',
+    'sha512': 'crypto',
+    'p4': 'source-p4',
+    'stf': 'test-p4',
+    'spec': 'test-p4',
+    'p4-stderr': 'test-p4',
+    'p4-error': 'test-p4',
+    'p4--stderr': 'test-p4',
+    'stderr': 'test-p4',
+    'h': 'source-clike',
+    'c': 'source-clike',
+    'hpp': 'source-clike',
+    'cpp': 'source-clike',
+    'cocci': 'source-clike',  # https://en.wikipedia.org/wiki/Coccinelle_(software)
+    'hxx': 'source-clike',
+    'cxx': 'source-clike',
+    'hh': 'source-clike',
+    'cc': 'source-clike',
+    'm4': 'source-clike',
+    'cnj': 'source-clike',
+    'ypp': 'source-clike',
+    'java': 'source-java',
+    'php': 'source-php',
+    'py': 'source-python',
+    'pyx': 'source-python',
+    'pxi': 'source-python',
+    'pyc': 'source-python',
+    'pyw': 'source-python',
+    'rb': 'source-ruby',
+    'tcl': 'source-tcl',
+    'pl': 'source-perl',
+    'pm': 'source-perl',
+    'prl': 'source-perl',
+    'el': 'source-elisp',
+    'awk': 'source-awk',
+    'ml': 'source-ocaml',
+    'go': 'source-golang',
+    'S': 'source-assembly',
+    's': 'source-assembly',
+    'asm': 'source-assembly',
+    'js': 'source-javascript',
+    'lua': 'source-lua',
+    'swift': 'source-swift',
+    'bazel': 'source-build',
+    'bazelci': 'source-build',
+    'bazelignore': 'source-build',
+    'bzl': 'source-build',
+    'bazelrc': 'source-build',
+    'dockerignore': 'source-build',
+    'meson': 'source-build',
+    'jam': 'source-build',
+    'patch': 'source-build',
+    'diff': 'source-build',
+    'makefile': 'source-build',
+    'mk': 'source-build',
+    'mak': 'source-build',
+    'nmake': 'source-build',
+    'am': 'source-build',
+    'ac': 'source-build',
+    'cmake': 'source-build',
+    'gradle': 'source-build',
+    'doxygen': 'source-build',
+    'dll': 'compiled-binary',
+    'exe': 'compiled-binary',
+    'elf': 'compiled-binary',
+    'a': 'compiled-binary',
+    'o': 'compiled-binary',
+    'so': 'compiled-binary',
+    'gitignore': 'config-text',
+    'gitmodules': 'config-text',
+    'ini': 'config-text',
+    'cfg': 'config-text',
+    'proto': 'api-protobuf',
+    'thrift': 'api-thrift',
+    'png': 'image',
+    'drawio': 'image',
+    'tiff': 'image',
+    'pbm': 'image',
+    'graffle': 'image',
+    'PNG': 'image',
+    'bmp': 'image',
+    'jpg': 'image',
+    'jpeg': 'image',
+    'img': 'image',
+    'gif': 'image',
+    'svg': 'image',
+    'fig': 'image',
+    'icns': 'image',
+    'ppm': 'image',
+    'odg': 'image',
+    'au': 'audio',
+    'aiff': 'audio',
+    'wav': 'audio',
+    'sh': 'script',
+    'bashsh': 'script',
+    'csh': 'script',
+    'bat': 'script',
+    'sed': 'script',
+    }
 
 for extension in sorted(fnames_with_extension.keys(),
                         key=lambda ext: len(fnames_with_extension[ext])):
@@ -64,8 +228,12 @@ for extension in sorted(fnames_with_extension.keys(),
         continue
     fnames = ' ' + limited_fnames(fnames_with_extension[extension],
                                   max_fnames_to_show)
-    print("%5u '%s'%s" % (len(fnames_with_extension[extension]), extension,
-                          fnames))
+    if extension in extension_category:
+        category = extension_category[extension]
+    else:
+        category = 'unknown'
+    print("%5u '%s' cat=%s%s" % (len(fnames_with_extension[extension]), extension,
+                                 category, fnames))
 nodot = len(fnames_with_extension[''])
 if nodot != 0:
     print('%5u no dot in filename: %s'
