@@ -10,7 +10,17 @@ import os, sys, re, fileinput, copy
 pkgs = []
 pkg = {}
 
-for line in fileinput.input('/var/lib/dpkg/status'):
+print(len(sys.argv))
+if len(sys.argv) != 1 and len(sys.argv) != 2:
+    print("usage: %s [ <dpkg-status-filename-to-read> ]"
+          "" % (sys.argv[0]), file=sys.stderr)
+    sys.exit(1)
+
+dpkg_status_fname = '/var/lib/dpkg/status'
+if len(sys.argv) == 2:
+    dpkg_status_fname = sys.argv[1]
+
+for line in fileinput.input(dpkg_status_fname):
     line = line.rstrip()
     # Blank lines separate info about different packages
     if line == '':
