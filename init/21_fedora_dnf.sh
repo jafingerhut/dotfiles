@@ -3,7 +3,7 @@ is_fedora || return 1
 
 # Install DNF packages.
 packages=(
-  mate-terminal
+#  mate-terminal
   emacs
 )
 
