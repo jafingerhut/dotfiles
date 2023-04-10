@@ -45,7 +45,7 @@ def parse_dnf_info(lines):
                 pkg['installed_size'] = 0
             if ('name' not in pkg):
                 print('problem with pkg=%s' % (pkg))
-            assert pkg['name'] is not None and pkg['installed_size'] is not None
+            assert pkg['name'] is not None and pkg['installed_size'] is not None and pkg['version'] is not None
             pkgs.append(pkg)
             pkg = {}
             continue
@@ -55,6 +55,9 @@ def parse_dnf_info(lines):
 #            print("dbg: Found package name '%s' in line '%s'"
 #                  "" % (pkg['name'], line), file=sys.stderr)
             continue
+        match = re.search(r"^\s*Version\s*:\s*(.*)\s*$", line)
+        if match:
+            pkg['version'] = match.group(1)
         match = re.search(r"^\s*Size\s*:\s*(.*)\s*$", line)
         if match:
             size_str = match.group(1)
@@ -111,6 +114,9 @@ def parse_dpkg_status(dpkg_status_fname):
         if match:
             pkg['name'] = match.group(1)
             continue
+        match = re.search(r"^\s*Version\s*:\s*(.*)\s*$", line)
+        if match:
+            pkg['version'] = match.group(1)
         match = re.search(r"^Installed-Size:\s*(.*)$", line)
         if match:
             size_str = match.group(1)
@@ -162,7 +168,10 @@ pkgs_by_size = sorted(pkgs,
                       key=lambda pkg: (pkg['installed_size'], pkg['name']))
 
 for pkg in pkgs_by_size:
-    print("%d %s" % (pkg['installed_size'], pkg['name']))
+    version_str = ''
+    if 'version' in pkg:
+        version_str = ' ' + pkg['version']
+    print("%d %s%s" % (pkg['installed_size'], pkg['name'], version_str))
 
 size_so_far = 0
 n = 0
