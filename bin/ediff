@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 #echo "Args: $*"
-"${EMACS}" --eval "(ediff-files \"$1\" \"$2\")"
+${EMACS_NO_DISPLAY} --eval "(ediff-files \"$1\" \"$2\")"

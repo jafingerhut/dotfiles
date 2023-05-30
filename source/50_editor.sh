@@ -48,6 +48,7 @@ then
     # use the default DISPLAY environment variable vlaue of
     # 'wayland-0', but the default value of GNOME_SETUP_DISPLAY
     # worked.
+    export EMACS_NO_DISPLAY="$EMACS"
     export EMACS="DISPLAY=${GNOME_SETUP_DISPLAY} $EMACS"
 fi
 
