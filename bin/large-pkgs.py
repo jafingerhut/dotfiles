@@ -138,6 +138,8 @@ def parse_dpkg_status(dpkg_status_fname):
 parse_format = None
 if osinfo['ID'] == 'fedora':
     parse_format = 'dnf-info'
+elif osinfo['ID'] == 'rocky':
+    parse_format = 'dnf-info'
 elif osinfo['ID'] == 'ubuntu':
     parse_format = 'dpkg-status'
 

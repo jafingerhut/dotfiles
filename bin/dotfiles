@@ -48,13 +48,19 @@ function is_ubuntu() {
 function is_fedora() {
   [[ "$(cat /etc/fedora-release 2> /dev/null)" =~ Fedora ]] || return 1
 }
+function is_rocky() {
+  [[ "$(cat /etc/rocky-release 2> /dev/null)" =~ Rocky ]] || return 1
+}
+function is_rhel_family() {
+  is_fedora || is_rocky || return 1
+}
 function is_windows() {
   [[ "$OSTYPE" =~ ^msys ]] || return 1
 }
 function get_os() {
   local os
   local found_match=0
-  for os in osx ubuntu fedora windows; do
+  for os in osx ubuntu fedora rocky windows; do
     is_$os; [[ $? == ${1:-0} ]] && echo $os && found_match=1
   done
   if [[ "$found_match" == 0 ]]
@@ -293,7 +299,7 @@ if [[ ! "$(type -P git)" ]] && is_ubuntu; then
   e_header "Installing Git"
   sudo apt-get -qq install git-core
 fi
-if [[ ! "$(type -P git)" ]] && is_fedora; then
+if [[ ! "$(type -P git)" ]] && is_rhel_family; then
   e_header "Installing Git"
   sudo dnf install git
 fi

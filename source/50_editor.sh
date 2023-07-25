@@ -1,6 +1,6 @@
 # Editing
 
-if is_fedora
+if is_rhel_family
 then
     # No alias for vi on Fedora, since at least for Fedora 34, vi is vim
     echo -n ""
@@ -34,7 +34,7 @@ fi
 # with 'linwin' as part of the name.  I plan to use that as part of the
 # name for Linux VMs I create on a Windows machine where this font size
 # works better for my viewing.
-if is_fedora
+if is_rhel_family
 then
     export ANDY_EMACS_FONT="Liberation Mono:pixelsize=15:foundry=1ASC:weight=normal:slant=normal:width=normal:spacing=100:scalable=true"
 elif [[ `uname -n` == *"linwin"* ]]
@@ -43,7 +43,7 @@ then
 fi
 
 export EMACS_NO_DISPLAY="$EMACS"
-if is_fedora
+if is_rhel_family
 then
     # At least when I tried to use Emacs27 on Fedora 34, it could not
     # use the default DISPLAY environment variable vlaue of

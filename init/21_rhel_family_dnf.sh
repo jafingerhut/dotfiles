@@ -1,5 +1,5 @@
-# Fedora-only stuff. Abort if not Fedora.
-is_fedora || return 1
+# RHEL family only stuff. Abort if not in RHEL family.
+is_rhel_family || return 1
 
 # Install DNF packages.
 packages=(
