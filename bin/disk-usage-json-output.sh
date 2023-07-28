@@ -7,7 +7,14 @@
 # in a Q&A forum on this page:
 # https://www.unix.com/unix-for-beginners-questions-and-answers/283512-printing-df-h-output-json-format.html
 
-df -BM | tr -s ' ' | jq -sR 'split("\n") |
+if [[ "$OSTYPE" =~ ^darwin ]]
+then
+    DF_OPTS="-m"
+else
+    DF_OPTS="-BM"
+fi
+
+df ${DF_OPTS} | tr -s ' ' | jq -sR 'split("\n") |
       .[1:-1] |
       map(split(" ")) |
       map({"file_system": .[0],

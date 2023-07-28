@@ -20,9 +20,16 @@
 # sort -n -k 3,3 out.txt | head -n 2
 # sort -n -k 3,3 out.txt | tail -n 1
 
-df -BM .
+if [[ "$OSTYPE" =~ ^darwin ]]
+then
+    DF_OPTS="-m"
+else
+    DF_OPTS="-BM"
+fi
+
+df ${DF_OPTS} .
 while true
 do
 	sleep 1
-	df -BM . | tail -n 1
+	df ${DF_OPTS} . | tail -n 1
 done
