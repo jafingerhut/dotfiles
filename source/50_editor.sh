@@ -37,8 +37,7 @@ fi
 if is_rhel_family
 then
     export ANDY_EMACS_FONT="Liberation Mono:pixelsize=15:foundry=1ASC:weight=normal:slant=normal:width=normal:spacing=100:scalable=true"
-elif [[ `uname -n` == *"linwin"* ]]
-then
+else
     export ANDY_EMACS_FONT="10x20"
 fi
 
