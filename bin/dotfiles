@@ -42,6 +42,9 @@ function assert() {
 function is_osx() {
   [[ "$OSTYPE" =~ ^darwin ]] || return 1
 }
+function is_debian() {
+  [[ "$(cat /etc/issue 2> /dev/null)" =~ Debian ]] || return 1
+}
 function is_ubuntu() {
   [[ "$(cat /etc/issue 2> /dev/null)" =~ Ubuntu ]] || return 1
 }
@@ -50,6 +53,9 @@ function is_fedora() {
 }
 function is_rocky() {
   [[ "$(cat /etc/rocky-release 2> /dev/null)" =~ Rocky ]] || return 1
+}
+function is_debian_family() {
+  is_debian || is_ubuntu || return 1
 }
 function is_rhel_family() {
   is_fedora || is_rocky || return 1
@@ -295,7 +301,7 @@ fi
 
 # If Git is not installed, install it (Ubuntu or Fedora only, since
 # Git comes standard with recent XCode or CLT)
-if [[ ! "$(type -P git)" ]] && is_ubuntu; then
+if [[ ! "$(type -P git)" ]] && is_ubuntu_family; then
   e_header "Installing Git"
   sudo apt-get -qq install git-core
 fi

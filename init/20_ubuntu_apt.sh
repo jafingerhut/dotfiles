@@ -1,5 +1,5 @@
-# Ubuntu-only stuff. Abort if not Ubuntu.
-is_ubuntu || return 1
+# Debian-family-only stuff. Abort if not Debian family
+is_debian_family || return 1
 
 # If the old files isn't removed, the duplicate APT alias will break sudo!
 sudoers_old="/etc/sudoers.d/sudoers-cowboy"; [[ -e "$sudoers_old" ]] && sudo rm "$sudoers_old"
@@ -59,15 +59,22 @@ packages=(
 )
 
 install_emacs26_from_kelleyk_ppa=0
-ubuntu_release=`lsb_release -s -r`
-if [[ "${ubuntu_release}" > "19" ]]
+if [[ is_ubuntu ]]
+then
+    ubuntu_release=`lsb_release -s -r`
+    if [[ "${ubuntu_release}" > "19" ]]
+    then
+	packages+=(emacs-gtk)
+    elif [[ "${ubuntu_release}" > "18" ]]
+    then
+	install_emacs26_from_kelleyk_ppa=1
+    else
+	packages+=(emacs24)
+    fi
+fi
+if [[ is_debian ]]
 then
     packages+=(emacs-gtk)
-elif [[ "${ubuntu_release}" > "18" ]]
-then
-    install_emacs26_from_kelleyk_ppa=1
-else
-    packages+=(emacs24)
 fi
 
 if [ "${install_emacs26_from_kelleyk_ppa}" == 1 ]

@@ -1,5 +1,5 @@
-# Ubuntu-only stuff. Abort if not Ubuntu.
-is_ubuntu || return 1
+# Debian-family-only stuff. Abort if not Debian family
+is_debian_family || return 1
 
 # Package management
 alias update="sudo apt-get -qq update && sudo apt-get upgrade"
