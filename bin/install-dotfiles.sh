@@ -1,5 +1,5 @@
 source /etc/os-release
-if [ ${ID} = "ubuntu" ]
+if [ ${ID} = "ubuntu" -o ${ID} = "debian" ]
 then
     sudo apt-get --yes install curl
 fi

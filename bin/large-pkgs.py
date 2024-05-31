@@ -142,6 +142,8 @@ elif osinfo['ID'] == 'rocky':
     parse_format = 'dnf-info'
 elif osinfo['ID'] == 'ubuntu':
     parse_format = 'dpkg-status'
+elif osinfo['ID'] == 'debian':
+    parse_format = 'dpkg-status'
 
 dpkg_status_fname = '/var/lib/dpkg/status'
 if len(sys.argv) == 2:

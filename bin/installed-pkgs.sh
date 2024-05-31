@@ -14,7 +14,7 @@ then
 fi
 source /etc/os-release
 
-if [ "${ID}" = "ubuntu" ]
+if [ "${ID}" = "ubuntu" -o "${ID}" = "debian" ]
 then
     ID_FAMILY="debian_family"
 elif [ "${ID}" = "fedora" -o "${ID}" = "rocky" ]
