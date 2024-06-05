@@ -13,3 +13,8 @@ prepend_to_manpath_if_exists () {
         export MANPATH="${dir}:$(manpath_remove ${dir})"
     fi
 }
+
+# Set the title of a GNOME Terminal window
+title() {
+    echo -e "\033]0;$@\007"
+}
