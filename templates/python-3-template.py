@@ -70,8 +70,11 @@ import re
 
 import argparse
 
-parser = argparse.ArgumentParser(description="""
-Text describing what this program does and how to use it.""")
+parser = argparse.ArgumentParser(
+    formatter_class=argparse.RawDescriptionHelpFormatter,
+    description="""
+Text describing what this program does and how to use it.
+""")
 parser.add_argument('--testbed', dest='testbed', type=topology.loader.load)
 parser.add_argument('--R1', dest='R1', type=str,
                     help="""The name of the device in the testbed
@@ -96,7 +99,7 @@ parser.add_argument('--trace', dest='trace',
                     this option is not specified), then do not
                     configure either command, but leave it as it
                     is on the device.""")
-args = parser.parse_known_args()[0]
+args, remaining_args = parser.parse_known_args()
 
 
 ######################################################################
