@@ -101,6 +101,11 @@ parser.add_argument('--trace', dest='trace',
                     is on the device.""")
 args, remaining_args = parser.parse_known_args()
 
+# NOTE: If there are any conditions you check later about the
+# arguments that lead you to want to show the command line help, call
+# this method:
+#
+# parser.print_help()
 
 ######################################################################
 # Example of regex split across multiple lines, and using named
