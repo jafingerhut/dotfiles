@@ -52,11 +52,20 @@ then
 		 liblzma-dev arping netperf iperf
 	    set +x
 	    ;;
-	20.04)
+	22.04)
 	    supported_distribution=1
 	    set -x
 	    sudo apt install -y zip bison build-essential cmake flex git \
 		 libedit-dev libllvm14 llvm-14-dev libclang-14-dev python3 \
+		 zlib1g-dev libelf-dev libfl-dev python3-setuptools \
+		 liblzma-dev libdebuginfod-dev arping netperf iperf
+	    set +x
+	    ;;
+	24.04)
+	    supported_distribution=1
+	    set -x
+	    sudo apt install -y zip bison build-essential cmake flex git \
+		 libedit-dev libllvm18 llvm-18-dev libclang-18-dev python3 \
 		 zlib1g-dev libelf-dev libfl-dev python3-setuptools \
 		 liblzma-dev libdebuginfod-dev arping netperf iperf
 	    set +x
@@ -99,5 +108,9 @@ set +x
 1>&2 echo ""
 1>&2 echo "e.g. with a command like this, if you use Bash:"
 1>&2 echo ""
-1>&2 echo "    export PATH=/usr/share/bcc/tools:$PATH"
+1>&2 echo "    export PATH=/usr/share/bcc/tools:\$PATH"
+1>&2 echo ""
+1>&2 echo "You should then be able to run a command like execsnoop using:"
+1>&2 echo ""
+1>&2 echo "    sudo `which execsnoop`"
 1>&2 echo "------------------------------------------------------------"
