@@ -36,6 +36,7 @@ fi
 source /etc/os-release
 
 supported_distribution=0
+tried_but_got_build_errors=0
 if [ "${ID}" = "ubuntu" ]
 then
     case "${VERSION_ID}" in
@@ -62,13 +63,14 @@ then
 	    set +x
 	    ;;
 	24.04)
-	    supported_distribution=1
-	    set -x
-	    sudo apt install -y zip bison build-essential cmake flex git \
-		 libedit-dev libllvm18 llvm-18-dev libclang-18-dev python3 \
-		 zlib1g-dev libelf-dev libfl-dev python3-setuptools \
-		 liblzma-dev libdebuginfod-dev arping netperf iperf
-	    set +x
+	    supported_distribution=0
+	    tried_but_got_build_errors=1
+#	    set -x
+#	    sudo apt install -y zip bison build-essential cmake flex git \
+#		 libedit-dev libllvm18 llvm-18-dev libclang-18-dev python3 \
+#		 zlib1g-dev libelf-dev libfl-dev python3-setuptools \
+#		 liblzma-dev libdebuginfod-dev arping netperf iperf
+#	    set +x
 	    ;;
     esac
 fi
@@ -78,6 +80,15 @@ then
     echo "Found supported ID ${ID} and VERSION_ID ${VERSION_ID} in /etc/os-release"
 else
     ubuntu_version_warning
+    if [ ${tried_but_got_build_errors} -eq 1 ]
+    then
+	1>&2 echo ""
+	1>&2 echo "This OS has been tried at least onc before, but"
+	1>&2 echo "there were errors during a compilation or build"
+	1>&2 echo "step that have not yet been fixed.  If you have"
+	1>&2 echo "experience in fixing such matters, your help is"
+	1>&2 echo "appreciated."
+    fi
     exit 1
 fi
 
