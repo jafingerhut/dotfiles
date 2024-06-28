@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# Install the BPF Compiler Collection tools.
+# Install BCC, the BPF Compiler Collection tools.
 
 # Based on instructions published here, limited to a few long term
 # supported versions of Ubuntu Linux.
@@ -15,68 +15,89 @@ THIS_SCRIPT_DIR_MAYBE_RELATIVE="${THIS_SCRIPT_FILE_MAYBE_RELATIVE%/*}"
 THIS_SCRIPT_DIR_ABSOLUTE=`readlink -f "${THIS_SCRIPT_DIR_MAYBE_RELATIVE}"`
 
 ubuntu_version_warning() {
+    1>&2 echo "Found ID ${ID} and VERSION_ID ${VERSION_ID} in /etc/os-release"
+    1>&2 echo ""
     1>&2 echo "This software has only been tested on:"
     1>&2 echo ""
-    1>&2 echo "    Ubuntu 16.04"
-    1>&2 echo "    Ubuntu 18.04"
-    1>&2 echo "    Ubuntu 20.04"
+    1>&2 echo "    Ubuntu 20.04, 22.04"
     1>&2 echo ""
-    1>&2 echo "Proceed installing manually at your own risk of"
-    1>&2 echo "significant time spent figuring out how to make it all"
-    1>&2 echo "work, or consider getting VirtualBox and creating an"
-    1>&2 echo "Ubuntu virtual machine with one of the tested versions."
+    1>&2 echo "See the following link to see if it has any advice"
+    1>&2 echo "for other operating systems:"
+    1>&2 echo ""
+    1>&2 echo "https://github.com/iovisor/bcc/blob/master/INSTALL.md"
 }
 
-lsb_release >& /dev/null
-if [ $? != 0 ]
+if [ ! -r /etc/os-release ]
 then
-    1>&2 echo "No 'lsb_release' found in your command path."
+    1>&2 echo "No file /etc/os-release.  Cannot determine what OS this is."
     ubuntu_version_warning
     exit 1
 fi
+source /etc/os-release
 
-distributor_id=`lsb_release -si`
-ubuntu_release=`lsb_release -s -r`
+supported_distribution=0
+if [ "${ID}" = "ubuntu" ]
+then
+    case "${VERSION_ID}" in
+	20.04)
+	    supported_distribution=1
+	    # TODO: Try changing python to python3 in this list to see
+	    # if that works a bit better.
+	    # Using python, I know that `execsnoop -h` cannot find
+	    # the Python bcc package, because it is running Python2.
+	    set -x
+	    sudo apt install -y zip bison build-essential cmake flex git \
+		 libedit-dev libllvm12 llvm-12-dev libclang-12-dev python3 \
+		 zlib1g-dev libelf-dev libfl-dev python3-setuptools \
+		 liblzma-dev arping netperf iperf
+	    set +x
+	    ;;
+	20.04)
+	    supported_distribution=1
+	    set -x
+	    sudo apt install -y zip bison build-essential cmake flex git \
+		 libedit-dev libllvm14 llvm-14-dev libclang-14-dev python3 \
+		 zlib1g-dev libelf-dev libfl-dev python3-setuptools \
+		 liblzma-dev libdebuginfod-dev arping netperf iperf
+	    set +x
+	    ;;
+    esac
+fi
 
-set -x
-if [ "${distributor_id}" = "Ubuntu" -a \( "${ubuntu_release}" = "16.04" -o "${ubuntu_release}" = "18.04" \) ]
+if [ ${supported_distribution} -eq 1 ]
 then
-    echo "Installing packages for Ubuntu 16.04, 18.04"
-    sudo apt-get --yes install bison build-essential cmake flex git libedit-dev libllvm6.0 llvm-6.0-dev libclang-6.0-dev python zlib1g-dev libelf-dev
-    # This was not in the instructions, but when I tried running this
-    # script on a minimal installation of Ubuntu 18.04 system, it
-    # failed when running a Python3 script at the line:
-    #     from distutils.core import setup
-    sudo apt-get --yes install python3-distutils
-elif [ "${distributor_id}" = "Ubuntu" -a "${ubuntu_release}" = "20.04" ]
-then
-    echo "Installing packages for Ubuntu 20.04"
-    sudo apt install -y bison build-essential cmake flex git libedit-dev libllvm7 llvm-7-dev libclang-7-dev python3 zlib1g-dev libelf-dev libfl-dev
-    # This was not in the instructions, but when I tried running this
-    # script on a minimal installation of Ubuntu 20.04 system, it
-    # failed when running a Python3 script at the line:
-    #     from distutils.core import setup
-    sudo apt-get --yes install python3-distutils
+    echo "Found supported ID ${ID} and VERSION_ID ${VERSION_ID} in /etc/os-release"
 else
     ubuntu_version_warning
-    1>&2 echo ""
-    1>&2 echo "Here is what command 'lsb_release -a' shows this OS to be:"
-    lsb_release -a
     exit 1
 fi
 
+set -x
 git clone https://github.com/iovisor/bcc.git
 cd bcc
-# Failed tag attempts on Ubuntu 20.04
-# v0.24.0
-git checkout v0.23.0
-cd ..
-mkdir bcc/build
-cd bcc/build
+git log -n 1 | head -n 4
+mkdir build
+cd build
 cmake ..
 make
 sudo make install
-cmake -DPYTHON_CMD=python3 .. # build python3 binding
+cmake -DPYTHON_CMD=python3 ..
 cd src/python/
 make
 sudo make install
+
+# Replace occurrencs of '/usr/bin/env python'
+# with '/usr/bin/env python3'
+find /usr/share/bcc/tools \! -type d -a \! -type l | xargs sudo sed -i 's-/usr/bin/env python$-/usr/bin/env python3-'
+
+set +x
+1>&2 echo ""
+1>&2 echo "------------------------------------------------------------"
+1>&2 echo "We recommend that you add this directory to your command path:"
+1>&2 echo ""
+1>&2 echo "    /usr/share/bcc/tools"
+1>&2 echo ""
+1>&2 echo "e.g. with a command like this, if you use Bash:"
+1>&2 echo ""
+1>&2 echo "    export PATH=/usr/share/bcc/tools:$PATH"
+1>&2 echo "------------------------------------------------------------"
