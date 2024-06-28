@@ -112,5 +112,5 @@ set +x
 1>&2 echo ""
 1>&2 echo "You should then be able to run a command like execsnoop using:"
 1>&2 echo ""
-1>&2 echo "    sudo `which execsnoop`"
+1>&2 echo "    sudo \`which execsnoop\`"
 1>&2 echo "------------------------------------------------------------"
