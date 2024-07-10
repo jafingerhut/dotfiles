@@ -177,6 +177,7 @@
 
 (require 'andys-c)
 (require 'andys-p4)
+(require 'andys-go)
 ;; I haven't used this stuff in a while, but make it easy to enable
 ;(require 'andys-hdls)
 ;(require 'andys-fortran)
@@ -188,6 +189,7 @@
 ;(require 'andys-asciidoc)
 ;(require 'andys-cl)
 
+(require 'go-mode)
 
 (require 'clojure-mode)
 (add-hook 'clojure-mode-hook
