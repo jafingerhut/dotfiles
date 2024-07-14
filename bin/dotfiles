@@ -282,7 +282,7 @@ function do_stuff() {
         [[ -e "$backup_dir" ]] || mkdir -p "$backup_dir"
         # Backup file / link / whatever.
         mv "$dest" "$backup_dir"
-        echo " >> $HOME/dbg-install-dotfiles.txt
+        echo "" >> $HOME/dbg-install-dotfiles.txt
         echo "dbg backup_dir=:${backup_dir}:" >> $HOME/dbg-install-dotfiles.txt
         echo "dbg file=:${file}:" >> $HOME/dbg-install-dotfiles.txt
         echo "dbg base=:${base}:" >> $HOME/dbg-install-dotfiles.txt
