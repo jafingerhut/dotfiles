@@ -282,22 +282,22 @@ function do_stuff() {
         [[ -e "$backup_dir" ]] || mkdir -p "$backup_dir"
         # Backup file / link / whatever.
         mv "$dest" "$backup_dir"
-        echo "" >> $HOME/dbg-install-dotfiles.txt
-        echo "dbg backup_dir=:${backup_dir}:" >> $HOME/dbg-install-dotfiles.txt
-        echo "dbg file=:${file}:" >> $HOME/dbg-install-dotfiles.txt
-        echo "dbg base=:${base}:" >> $HOME/dbg-install-dotfiles.txt
-        echo "dbg dest=:${dest}:" >> $HOME/dbg-install-dotfiles.txt
-        echo "dbg basename dest=:$(basename ${dest}):" >> $HOME/dbg-install-dotfiles.txt
-        if [[ $(basename "$dest") == ".ssh" ]]; then
-          if [[ -e $backup_dir/.ssh/authorized_keys ]]; then
-            e_arrow "Copying $backup_dir/.ssh/authorized_keys to $dest/"
-            /bin/cp -p "$backup_dir/.ssh/authorized_keys" "$dest/"
-	  fi
-	fi
       fi
     fi
     # Do stuff.
     "$1_do" "$base" "$file"
+    echo "" >> $HOME/dbg-install-dotfiles.txt
+    echo "dbg backup_dir=:${backup_dir}:" >> $HOME/dbg-install-dotfiles.txt
+    echo "dbg file=:${file}:" >> $HOME/dbg-install-dotfiles.txt
+    echo "dbg base=:${base}:" >> $HOME/dbg-install-dotfiles.txt
+    echo "dbg dest=:${dest}:" >> $HOME/dbg-install-dotfiles.txt
+    echo "dbg basename dest=:$(basename ${dest}):" >> $HOME/dbg-install-dotfiles.txt
+    if [[ $(basename "$dest") == ".ssh" ]]; then
+      if [[ -e $backup_dir/.ssh/authorized_keys ]]; then
+        e_arrow "Copying $backup_dir/.ssh/authorized_keys to $dest/"
+        /bin/cp -p "$backup_dir/.ssh/authorized_keys" "$dest/"
+      fi
+    fi
   done
 }
 
