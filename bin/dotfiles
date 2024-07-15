@@ -286,12 +286,16 @@ function do_stuff() {
     fi
     # Do stuff.
     "$1_do" "$base" "$file"
-    echo "" >> $HOME/dbg-install-dotfiles.txt
-    echo "dbg backup_dir=:${backup_dir}:" >> $HOME/dbg-install-dotfiles.txt
-    echo "dbg file=:${file}:" >> $HOME/dbg-install-dotfiles.txt
-    echo "dbg base=:${base}:" >> $HOME/dbg-install-dotfiles.txt
-    echo "dbg dest=:${dest}:" >> $HOME/dbg-install-dotfiles.txt
-    echo "dbg basename dest=:$(basename ${dest}):" >> $HOME/dbg-install-dotfiles.txt
+    #echo "" >> $HOME/dbg-install-dotfiles.txt
+    #echo "dbg backup_dir=:${backup_dir}:" >> $HOME/dbg-install-dotfiles.txt
+    #echo "dbg file=:${file}:" >> $HOME/dbg-install-dotfiles.txt
+    #echo "dbg base=:${base}:" >> $HOME/dbg-install-dotfiles.txt
+    #echo "dbg dest=:${dest}:" >> $HOME/dbg-install-dotfiles.txt
+    #echo "dbg basename dest=:$(basename ${dest}):" >> $HOME/dbg-install-dotfiles.txt
+    # The steps below are especially useful if I install dotfiles on
+    # an Amazon EC2 instance, because if there is no
+    # `$HOME/.ssh/authorized_keys` file in an instance, I cannot log
+    # into it.
     if [[ $(basename "$dest") == ".ssh" ]]; then
       if [[ -e $backup_dir/.ssh/authorized_keys ]]; then
         e_arrow "Copying $backup_dir/.ssh/authorized_keys to $dest/"
