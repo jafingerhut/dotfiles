@@ -59,7 +59,7 @@ packages=(
 )
 
 install_emacs26_from_kelleyk_ppa=0
-if [[ is_ubuntu == 1 ]]
+if [ is_ubuntu ]
 then
     ubuntu_release=`lsb_release -s -r`
     if [[ "${ubuntu_release}" > "19" ]]
@@ -72,7 +72,7 @@ then
 	packages+=(emacs24)
     fi
 fi
-if [[ is_debian == 1 ]]
+if [ is_debian ]
 then
     packages+=(emacs-gtk)
 fi
