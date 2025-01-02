@@ -92,6 +92,7 @@ else
     exit 1
 fi
 
+set -x
 # Update GNOME settings via the following corresponding gsettings
 # commands.
 
