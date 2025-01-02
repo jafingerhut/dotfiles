@@ -48,7 +48,7 @@ then
     exit 1
 fi
 
-GNOME_VERSION_STR=`gnome-shell --version | awk {print $3;}`
+GNOME_VERSION_STR=`gnome-shell --version | awk '{print $3;}'`
 
 TERMINAL_NAME="org.gnome.Terminal.desktop"
 NAUTILUS_NAME="org.gnome.Nautilus.desktop"
@@ -107,7 +107,7 @@ gsettings set org.gnome.desktop.screensaver lock-enabled false
 gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 24
 
 # Update the list of icons pinned in the Dash:
-gsettings set org.gnome.shell favorite-apps "['${TERMINAL_NAME}", '${FIREFOX_NAME}", '${NAUTILUS_NAME}", '${SETTINGS_NAME}", '${UPDATE_MANAGER_NAME}", '${HELP_NAME}"']"
+gsettings set org.gnome.shell favorite-apps "['${TERMINAL_NAME}', '${FIREFOX_NAME}', '${NAUTILUS_NAME}', '${SETTINGS_NAME}', '${UPDATE_MANAGER_NAME}', '${HELP_NAME}']"
 
 # System -> Users -> user account "p4" -> Automatic Login -> enabled
 # Changing this does not change the output of the command:
