@@ -16,17 +16,28 @@
 # -p{Password}        Add a password specified on the command line
 # -p                  Add a password, interactively prompting user for the password
 
-SEVENZIPBIN="7z"
-#SEVENZIPBIN="7zz"
+FOUNDBIN=0
 
-which ${SEVENZIPBIN}
-exit_status=$?
-if [ ${exit_status} -ne 0 ]
+for f in 7z 7zz
+do
+    which ${f}
+    exit_status=$?
+    if [ ${exit_status} -eq 0 ]
+    then
+	FOUNDBIN=1
+	SEVENZIPBIN="$f"
+    fi
+done
+
+if [ ${FOUNDBIN} -eq 0 ]
 then
-    1>&2 echo "Command '${SEVENZIPBIN}' not found in command path."
-    1>&2 echo "On Ubuntu Linux you can use this command to install '7z':"
+    1>&2 echo "None of these commands were found in your command path:"
+    1>&2 echo "    7z 7zz"
     1>&2 echo ""
+    1>&2 echo "On Ubuntu Linux you can use this command to install '7z':"
     1>&2 echo "    sudo apt-get install 7zip"
+    1>&2 echo "On macOS with Homebrew you can use this command to install '7zz':"
+    1>&2 echo "    brew install sevenzip"
     exit 1
 fi
 
