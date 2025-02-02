@@ -13,21 +13,41 @@
 # -md=32m             Use a dictionary size = 32 megabytes
 # -ms=on              Solid archive = on
 # -mhe=on             7z format only : enables or disables archive header encryption
-# -p{Password}        Add a password
+# -p{Password}        Add a password specified on the command line
+# -p                  Add a password, interactively prompting user for the password
 
-#SEVENZIPBIN="7z"
-SEVENZIPBIN="7zz"
+SEVENZIPBIN="7z"
+#SEVENZIPBIN="7zz"
+
+which ${SEVENZIPBIN}
+exit_status=$?
+if [ ${exit_status} -ne 0 ]
+then
+    1>&2 echo "Command '${SEVENZIPBIN}' not found in command path."
+    1>&2 echo "On Ubuntu Linux you can use this command to install '7z':"
+    1>&2 echo ""
+    1>&2 echo "    sudo apt-get install 7zip"
+    exit 1
+fi
 
 ARCHIVE_TO_CREATE="archive.7z"
 
 echo "Creating archive ${ARCHIVE_TO_CREATE} ..."
 ${SEVENZIPBIN} a \
   -t7z -m0=lzma2 -mx=9 -mfb=64 \
-  -md=32m -ms=on -mhe=on \
-   "${ARCHIVE_TO_CREATE}"  $*
+  -md=32m -ms=on -mhe=on -p \
+   "${ARCHIVE_TO_CREATE}" $*
 
 # Verify the archive is encrypted
 
+echo "----------------------------------------------------------------------"
+echo "Reading archive to verify.  After entering the same password again,"
+echo "look for occurrences of lines like this after each 'Path' line for"
+echo "files in the archive (you may see 'Encrypted = -' for directories):"
 echo ""
-echo "Reading archive to verify ..."
-${SEVENZIPBIN} l -slt "${ARCHIVE_TO_CREATE}" | egrep '(Encrypted|AES|password)'
+echo "    Encrypted = +"
+echo "    Method = LZMA2:12 7zAES"
+echo "----------------------------------------------------------------------"
+echo ""
+${SEVENZIPBIN} l -slt "${ARCHIVE_TO_CREATE}"
+#${SEVENZIPBIN} l -slt "${ARCHIVE_TO_CREATE}" | egrep '(Path|Encrypted|AES|password)'
