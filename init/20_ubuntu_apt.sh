@@ -87,6 +87,16 @@ then
     sudo apt install emacs26
 fi
 
+if [ is_debian ]
+then
+    # Installing the emacs package causes the postfix package to be
+    # installed, which if you do not do it like this, causes
+    # interactive questions to be given to the user.  Avoid those
+    # interactive questions by installing it as follows.
+    echo "postfix postfix/main_mailer_type select No configuration" | sudo debconf-set-selections
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install --assume-yes postfix
+fi
+
 packages=($(setdiff "${packages[*]}" "$(dpkg --get-selections | grep -v deinstall | awk '{print $1}')"))
 
 if (( ${#packages[@]} > 0 )); then
