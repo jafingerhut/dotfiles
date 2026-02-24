@@ -1,6 +1,6 @@
 #! /bin/bash
 
 set -x
-FNAME=`mktemp --tmpdir big-empty-zero-file-XXXXXXXX`
-dd if=/dev/zero of=${FNAME} bs=4096k
-rm -f ${FNAME}
+FNAME="/bigemptyfile"
+sudo dd if=/dev/zero | sudo dd of=${FNAME} bs=4096k
+sudo /bin/rm -f ${FNAME}
