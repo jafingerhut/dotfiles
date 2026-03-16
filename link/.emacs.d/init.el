@@ -4,7 +4,8 @@
 (when (< emacs-major-version 24)
   ;; For important compatibility libraries like cl-lib
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
-(package-initialize)
+(when (>= emacs-major-version 25)
+  (package-initialize))
 
 ;; To add clojure-mode, nrepl, nrepl-ritz, etc., do M-x
 ;; package-list-packages, find the package name in the resulting
@@ -189,13 +190,15 @@
 ;(require 'andys-scheme)
 ;(require 'andys-asciidoc)
 
-(require 'go-mode)
+(when (>= emacs-major-version 25)
+  (require 'go-mode))
 
-(require 'clojure-mode)
-(add-hook 'clojure-mode-hook
-	  (lambda ()
-	    (setq indent-tabs-mode nil)
-	    (viper-mode)))
+(when (>= emacs-major-version 25)
+  (require 'clojure-mode)
+  (add-hook 'clojure-mode-hook
+	    (lambda ()
+	      (setq indent-tabs-mode nil)
+	      (viper-mode))))
 
 
 ;; Indent Lisp if so that the 'then' part is indented the same as the
