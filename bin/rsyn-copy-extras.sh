@@ -1,21 +1,5 @@
 #! /bin/bash
 
-# Combos that were supported before, with 6 nearly identical bash scripts:
-
-# Extras -> Seagate4TB
-# Extras -> MyBook4TB
-# MyBook4TB -> Extras
-# MyBook4TB -> Seagate4TB
-# Seagate4TB -> Extras
-# Seagate4TB -> MyBook4TB
-
-#SRC_DISK="Extras"
-#SRC_DISK="Seagate4TB"
-#SRC_DISK="MyBook4TB"
-#DST_DISK="Extras"
-#DST_DISK="Seagate4TB"
-#DST_DISK="MyBook4TB"
-
 show_usage() {
     1>&2 echo "usage: `basename $0` <src_disk> <dst_disk> [ other-rsync-options ]"
     1>&2 echo ""
@@ -61,8 +45,8 @@ fi
 #echo "debug rest of args: :$*:"
 #exit 0
 
-# rsync options, confirmed in rsync man page for rsync version 3.1.1,
-# protocol version 31
+# rsync options, confirmed in rsync man page for rsync version 3.4.1,
+# protocol version 32
 
 #        -r, --recursive             recurse into directories
 #        -l, --links                 copy symlinks as symlinks
@@ -73,10 +57,10 @@ fi
 #        -b, --backup                make backups (see --suffix & --backup-dir)
 #        -u, --update                skip files that are newer on the receiver
 #        -H, --hard-links            preserve hard links
-#        -A, --acls                  preserve ACLs (implies -p)
-#        -X, --xattrs                preserve extended attributes
-#        -E, --executability         preserve executability
-#        -N, --crtimes               preserve create times (newness)
+#        -E, --extended-attributes
+#             Apple specific option to copy extended attributes, resource forks, and ACLs.
+#             Requires at least Mac OS X 10.4 or suitably patched rsync.
+#        --executability
 #            --modify-window=NUM     compare mod-times with reduced accuracy
 #            --exclude=PATTERN       exclude files matching PATTERN
 
@@ -110,7 +94,7 @@ fi
 #        -6, --ipv6                  prefer IPv6
 
 
-RSYNC='rsync -rlptgvbuHAXEN --modify-window=5 --exclude .DS_Store'
+RSYNC='rsync -rlptgvbuHE --executability --modify-window=5 --exclude .DS_Store'
 # Get additional rsync options from command line of this script
 RSYNC="$RSYNC $*"
 
