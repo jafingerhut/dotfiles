@@ -47,16 +47,16 @@ function is_debian() {
 }
 function is_ubuntu() {
   if [[ "$(cat /etc/issue 2> /dev/null)" =~ Ubuntu ]]; then
-    echo "is_ubuntu found /etc/issue containing Ubuntu" >> $HOME/log-debug-dotfile.txt
+    echo "bin/dotfiles:is_ubuntu found /etc/issue containing Ubuntu" >> $HOME/log-debug-dotfile.txt
     return 1
   else
     source /etc/os-release
     if [[ "${ID_LIKE}" == *"ubuntu"* ]]; then
-      echo "is_ubuntu found /etc/os-release ID_LIKE containing ubuntu" >> $HOME/log-debug-dotfile.txt
+      echo "bin/dotfiles:is_ubuntu found /etc/os-release ID_LIKE containing ubuntu" >> $HOME/log-debug-dotfile.txt
       return 1
     fi
   fi
-  echo "is_ubuntu returning false" >> $HOME/log-debug-dotfile.txt
+  echo "bin/dotfiles:is_ubuntu returning false" >> $HOME/log-debug-dotfile.txt
   return 0
 }
 function is_fedora() {
@@ -218,6 +218,7 @@ function init_files() {
   else
     # Otherwise default to all scripts not specifically for other OSes
     oses=($(get_os 1))
+    echo "in bin/dotfiles:init_files oses=${oses}" >> $HOME/log-debug-dotfile.txt
     for opt in "${menu_options[@]}"; do
       remove=
       for os in "${oses[@]}"; do

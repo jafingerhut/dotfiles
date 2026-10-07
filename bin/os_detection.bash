@@ -4,16 +4,16 @@ function is_osx() {
 }
 function is_ubuntu() {
   if [[ "$(cat /etc/issue 2> /dev/null)" =~ Ubuntu ]]; then
-    echo "is_ubuntu found /etc/issue containing Ubuntu" >> $HOME/log-debug-dotfile.txt
+    echo "bin/os_detection.bash:is_ubuntu found /etc/issue containing Ubuntu" >> $HOME/log-debug-dotfile.txt
     return 1
   else
     source /etc/os-release
     if [[ "${ID_LIKE}" == *"ubuntu"* ]]; then
-      echo "is_ubuntu found /etc/os-release ID_LIKE containing ubuntu" >> $HOME/log-debug-dotfile.txt
+      echo "bin/os_detection.bash:is_ubuntu found /etc/os-release ID_LIKE containing ubuntu" >> $HOME/log-debug-dotfile.txt
       return 1
     fi
   fi
-  echo "is_ubuntu returning false" >> $HOME/log-debug-dotfile.txt
+  echo "bin/os_detection.bash:is_ubuntu returning false" >> $HOME/log-debug-dotfile.txt
   return 0
 }
 function get_os() {
