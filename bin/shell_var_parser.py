@@ -33,6 +33,5 @@ def loads(s):
 def load(fname):
     lines = []
     for line in fileinput.input(fname):
-        lines.append(line)
+        lines.append(line.strip())
     return parse_lines(lines)
-        
