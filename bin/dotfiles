@@ -372,8 +372,11 @@ export PATH
 shopt -s dotglob
 shopt -s nullglob
 
+echo "got here #1" >> $HOME/log-debug-dotfile.txt
+
 # Create caches dir and init subdir, if they don't already exist.
 mkdir -p "$DOTFILES/caches/init"
+echo "got here #2" >> $HOME/log-debug-dotfile.txt
 
 # If backups are needed, this is where they'll go.
 backup_dir="$DOTFILES/backups/$(date "+%Y_%m_%d-%H_%M_%S")/"
@@ -381,8 +384,11 @@ backup=
 
 # Execute code for each file in these subdirectories.
 do_stuff "copy"
+echo "got here #3" >> $HOME/log-debug-dotfile.txt
 do_stuff "link"
+echo "got here #4" >> $HOME/log-debug-dotfile.txt
 do_stuff "init"
+echo "got here #5" >> $HOME/log-debug-dotfile.txt
 
 # Alert if backups were made.
 if [[ "$backup" ]]; then
