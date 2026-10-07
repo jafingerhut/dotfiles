@@ -46,7 +46,18 @@ function is_debian() {
   [[ "$(cat /etc/issue 2> /dev/null)" =~ Debian ]] || return 1
 }
 function is_ubuntu() {
-  [[ "$(cat /etc/issue 2> /dev/null)" =~ Ubuntu ]] || return 1
+  if [[ "$(cat /etc/issue 2> /dev/null)" =~ Ubuntu ]]; then
+    echo "is_ubuntu found /etc/issue containing Ubuntu" >> $HOME/log-debug-dotfile.txt
+    return 1
+  else
+    source /etc/os-release
+    if [[ "${ID_LIKE}" == *"ubuntu"* ]]; then
+      echo "is_ubuntu found /etc/os-release ID_LIKE containing ubuntu" >> $HOME/log-debug-dotfile.txt
+      return 1
+    fi
+  fi
+  echo "is_ubuntu returning false" >> $HOME/log-debug-dotfile.txt
+  return 0
 }
 function is_fedora() {
   [[ "$(cat /etc/fedora-release 2> /dev/null)" =~ Fedora ]] || return 1

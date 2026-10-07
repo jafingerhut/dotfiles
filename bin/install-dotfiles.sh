@@ -10,7 +10,7 @@ else
     if [[ -e /etc/os-release ]]
     then
         source /etc/os-release
-        if [ ${ID} = "ubuntu" -o ${ID} = "debian" ]
+        if [ ${ID} = "ubuntu" -o ${ID} = "debian" -o ${ID_LIKE} == *"ubuntu" ]
         then
             sudo apt-get --yes install curl
         fi
