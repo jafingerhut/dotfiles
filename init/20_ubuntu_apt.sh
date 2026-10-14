@@ -1,5 +1,7 @@
 # Debian-family-only stuff. Abort if not Debian family
+echo "got here 20_ubuntu_apt.sh #1" >> $HOME/log-debug-dotfile.txt
 is_debian_family || return 1
+echo "got here 20_ubuntu_apt.sh #2" >> $HOME/log-debug-dotfile.txt
 
 # If the old files isn't removed, the duplicate APT alias will break sudo!
 sudoers_old="/etc/sudoers.d/sudoers-cowboy"; [[ -e "$sudoers_old" ]] && sudo rm "$sudoers_old"

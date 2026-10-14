@@ -1,5 +1,7 @@
 # RHEL family only stuff. Abort if not in RHEL family.
+echo "got here 21_rhel_family_dnf.sh #1" >> $HOME/log-debug-dotfile.txt
 is_rhel_family || return 1
+echo "got here 21_rhel_family_dnf.sh #2" >> $HOME/log-debug-dotfile.txt
 
 # Install DNF packages.
 packages=(

@@ -30,7 +30,8 @@ if is_rhel_family
 then
     export ANDY_EMACS_FONT="Liberation Mono:pixelsize=15:foundry=1ASC:weight=normal:slant=normal:width=normal:spacing=100:scalable=true"
 else
-    export ANDY_EMACS_FONT="10x20"
+    #export ANDY_EMACS_FONT="10x20"
+    export ANDY_EMACS_FONT="UbuntuSansMono-14"
 fi
 
 export EMACS_NO_DISPLAY="$EMACS"
