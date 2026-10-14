@@ -144,7 +144,7 @@ for my $size (sort {$b <=> $a} keys %{$size2fnamelist}) {
 		my $exit_status = system @{$cmd_list};
 		# cmp returns exit status 256 if the compared files do no match
 		if ($exit_status == 0) {
-		    printf "%d %s %s\n", $size, $full_fname1, $full_fname2;
+		    printf "%d \"%s\" \"%s\"\n", $size, $full_fname1, $full_fname2;
 		    ++$num_matches->{$dir1 . "+" . $dir2};
 		    $already_found_matching_file->{$full_fname2} = 1;
 		} elsif ($exit_status == 256) {
