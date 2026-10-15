@@ -41,19 +41,19 @@
 ;; Syntactic HighLighting
 
 ;; Main keywords (declarations and operators)
-(setq p4_16-keywords 
+(setq p4_16-keywords
       '("action" "apply"
         "control"
-        "default" 
+        "default"
         "else" "enum" "extern" "exit"
         "header" "header_union"
         "if"
         "match_kind"
-        "package" "parser" 
+        "package" "parser"
         "return"
         "select" "state" "struct" "switch"
         "table"  "transition" "tuple" "typedef" "type"
-        "verify" 
+        "verify"
         ))
 
 (setq p4_16-annotations
@@ -62,7 +62,7 @@
 
 (setq p4_16-attributes
       '("const" "in" "inout" "out"
-        ;; Tables 
+        ;; Tables
         "key" "actions" "default_action" "entries" "implementation"
         "counters" "meters"
         ))
@@ -109,7 +109,7 @@
         ))
 
 (setq p4_16-cpp
-      '("#include" 
+      '("#include"
         "#define" "#undef"
         "#if" "#ifdef" "#ifndef"
         "#elif" "#else"
@@ -206,50 +206,50 @@
 (setq p4_16-imenu-generic-expression
       (list
        (list "Controls"
-	     (concat "^ *"
-		     opt-name-annotation-regex
-		     " *control +\\([A-Za-z0-9_]*\\)")
-	     2)
+             (concat "^ *"
+                     opt-name-annotation-regex
+                     " *control +\\([A-Za-z0-9_]*\\)")
+             2)
        (list "Externs"
-	     (concat "^ *"
-		     opt-name-annotation-regex
-		     " *extern +\\([A-Za-z0-9_]*\\) *\\([A-Za-z0-9_]*\\)")
-	     3)
+             (concat "^ *"
+                     opt-name-annotation-regex
+                     " *extern +\\([A-Za-z0-9_]*\\) *\\([A-Za-z0-9_]*\\)")
+             3)
        (list "Tables"
-	     (concat "^ *"
-		     opt-name-annotation-regex
-		     " *table +\\([A-Za-z0-9_]*\\)")
+             (concat "^ *"
+                     opt-name-annotation-regex
+                     " *table +\\([A-Za-z0-9_]*\\)")
              2)
        (list "Actions"
-	     (concat "^ *"
-		     opt-name-annotation-regex
-		     " *action +\\([A-Za-z0-9_]*\\)")
-	     2)
+             (concat "^ *"
+                     opt-name-annotation-regex
+                     " *action +\\([A-Za-z0-9_]*\\)")
+             2)
        (list "Parsers"
-	     (concat "^ *"
-		     opt-name-annotation-regex
-		     " *parser +\\([A-Za-z0-9_]*\\)")
-	     2)
+             (concat "^ *"
+                     opt-name-annotation-regex
+                     " *parser +\\([A-Za-z0-9_]*\\)")
+             2)
        (list "Parser States"
-	     (concat "^ *"
-		     opt-name-annotation-regex
-		     " *state +\\([A-Za-z0-9_]*\\)")
+             (concat "^ *"
+                     opt-name-annotation-regex
+                     " *state +\\([A-Za-z0-9_]*\\)")
              2)
        (list "Headers"
-	     (concat "^ *"
-		     opt-name-annotation-regex
-		     " *header +\\([A-Za-z0-9_]*\\)")
-	     2)
+             (concat "^ *"
+                     opt-name-annotation-regex
+                     " *header +\\([A-Za-z0-9_]*\\)")
+             2)
        (list "Header Unions"
-	     (concat "^ *"
-		     opt-name-annotation-regex
-		     " *header_union +\\([A-Za-z0-9_]*\\)")
-	     2)
+             (concat "^ *"
+                     opt-name-annotation-regex
+                     " *header_union +\\([A-Za-z0-9_]*\\)")
+             2)
        (list "Structs"
-	     (concat "^ *"
-		     opt-name-annotation-regex
-		     " *struct +\\([A-Za-z0-9_]*\\)")
-	     2)
+             (concat "^ *"
+                     opt-name-annotation-regex
+                     " *struct +\\([A-Za-z0-9_]*\\)")
+             2)
        ))
 
 ;;; Cscope Support
@@ -265,22 +265,22 @@
 (define-derived-mode p4_16-mode prog-mode "P4_16"
   "Major mode for editing P4_16 programs."
   :syntax-table p4_16-mode-syntax-table
-  
+
   ;; Comments
   (setq-local comment-start "// ")
   (setq-local comment-end "")
-  
+
   ;; Font-lock (Syntax Highlighting)
   (setq font-lock-defaults '(p4_16-font-lock-keywords))
-  
+
   ;; Indentation
   (setq-local indent-line-function #'p4_16-indent-line)
   (setq-local indent-tabs-mode nil)
-  
+
   ;; Imenu
   (setq imenu-generic-expression p4_16-imenu-generic-expression)
   (imenu-add-to-menubar "P4_16")
-  
+
   ;; Cscope minor mode
   (when (fboundp 'cscope-minor-mode)
     (cscope-minor-mode)))
