@@ -1,19 +1,20 @@
 ;;; p4_16-mode.el --- Support for the P4_16 programming language
+;; SPDX-FileCopyrightText: 2016 Barefoot Networks, Inc.
+;; SPDX-License-Identifier: Apache-2.0
 
-;; Copyright (C) 2016- Barefoot Networks
 ;; Author: Vladimir Gurevich <vladimir.gurevich@barefootnetworks.com>
 ;; Maintainer: Vladimir Gurevich <vladimir.gurevich@barefootnetworks.com>
 ;; Created: 15 April 2017
 ;; Version: 0.2
 ;; Keywords: languages p4_16
-;; Homepage: http://p4.org
+;; Homepage: https://p4.org
 
 ;; This file is not part of GNU Emacs.
 
 ;; This file is free software…
 
 ;; This mode has preliminary support for P4_16. It covers the core language,
-;; but it is not clear yet, how we can highlight the indentifiers, defined
+;; but it is not clear yet, how we can highlight the identifiers, defined
 ;; for a particular architecture. Core library definitions are included
 
 ;; Placeholder for user customization code
@@ -39,7 +40,7 @@
 
 ;; Syntactic HighLighting
 
-;; Main keywors (declarations and operators)
+;; Main keywords (declarations and operators)
 (setq p4_16-keywords 
       '("action" "apply"
         "control"

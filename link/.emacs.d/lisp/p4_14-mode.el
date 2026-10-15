@@ -1,12 +1,13 @@
 ;;; p4_14-mode.el --- Support for the P4_14 programming language
+;; SPDX-FileCopyrightText: 2016 Barefoot Networks, Inc.
+;; SPDX-License-Identifier: Apache-2.0
 
-;; Copyright (C) 2016- Barefoot Networks
 ;; Author: Vladimir Gurevich <vladimir.gurevich@barefootnetworks.com>
 ;; Maintainer: Vladimir Gurevich <vladimir.gurevich@barefootnetworks.com>
 ;; Created: 21 Jan 2016
 ;; Version: 1.0
 ;; Keywords: languages p4_14
-;; Homepage: http://p4_14.org
+;; Homepage: https://p4.org
 
 ;; This file is not part of GNU Emacs.
 
@@ -35,7 +36,7 @@
 
 ;; Syntactic HighLighting
 
-;; Main keywors (declarations and operators)
+;; Main keywords (declarations and operators)
 (setq p4_14-keywords 
       '("action" "action_profile" "apply" "attribute"
         "blackbox" "blackbox_type"
