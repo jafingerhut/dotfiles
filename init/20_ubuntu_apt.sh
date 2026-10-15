@@ -120,3 +120,24 @@ if [[ ! "$(type -P git-extras)" ]]; then
     e_header "Skipping installing Git Extras since there is no directory $DOTFILES/vendor/git-extras"
   fi
 fi
+
+# After installing Emacs, install font Ubuntu-Sans-Mono if it is not
+# already installed.
+
+FONTNAME="UbuntuSansMono"
+if emacs -Q --eval "(if (find-font (font-spec :name \"${FONTNAME}\")) (kill-emacs 0) (kill-emacs 1))" 2>/dev/null; then
+    echo "Font '${FONTNAME}' exists and is usable by Emacs!"
+else
+    echo "Font '${FONTNAME}' is missing.  Attempting to install it."
+    # If UbuntuSansMono-14 is not usable by Emacs according to the
+    # above, it can be installed by these commands:
+    sudo apt-get install --yes wget
+    TMPDIRNAME=$(mktemp -d)
+    cd ${TMPDIRNAME}
+    wget https://github.com/canonical/Ubuntu-Sans-Mono-fonts/releases/download/v1.100/Ubuntu-Sans-Mono-fonts-v1.100.zip
+    unzip -e Ubuntu-Sans-Mono-fonts-v1.100.zip
+    mkdir -p $HOME/.local/share/fonts
+    cp -p Ubuntu-Sans-Mono-fonts-v1.100/fonts/ttf/UbuntuSansMono-*.ttf $HOME/.local/share/fonts/
+    fc-cache -fv
+    /bin/rm -fr ${TMPDIRNAME}
+fi
