@@ -196,18 +196,60 @@
 
 ;;; Imenu support
 (require 'imenu)
+
+;; regex to optionally match a name annotation, e.g. like this example:
+;; @name(".process_replication.nop")
+(setq opt-name-annotation-regex
+      "\\(@name[(] *\"[A-Za-z0-9_. ]+\" *[)]\\)\?")
+
 (setq p4_16-imenu-generic-expression
-      '(
-        ("Controls"      "^ *control +\\([A-Za-z0-9_]*\\)"      1)
-        ("Externs"       "^ *extern +\\([A-Za-z0-9_]*\\) *\\([A-Za-z0-9_]*\\)" 2)
-        ("Tables"        "^ *table +\\([A-Za-z0-9_]*\\)"        1)
-        ("Actions"       "^ *action +\\([A-Za-z0-9_]*\\)"       1)
-        ("Parsers"       "^ *parser +\\([A-Za-z0-9_]*\\)"       1)
-        ("Parser States" "^ *state +\\([A-Za-z0-9_]*\\)"        1)
-        ("Headers"       "^ *header +\\([A-Za-z0-9_]*\\)"       1)
-        ("Header Unions" "^ *header_union +\\([A-Za-z0-9_]*\\)" 1)
-        ("Structs"       "^ *struct +\\([A-Za-z0-9_]*\\)"       1)
-        ))
+      (list
+       (list "Controls"
+	     (concat "^ *"
+		     opt-name-annotation-regex
+		     " *control +\\([A-Za-z0-9_]*\\)")
+	     2)
+       (list "Externs"
+	     (concat "^ *"
+		     opt-name-annotation-regex
+		     " *extern +\\([A-Za-z0-9_]*\\) *\\([A-Za-z0-9_]*\\)")
+	     3)
+       (list "Tables"
+	     (concat "^ *"
+		     opt-name-annotation-regex
+		     " *table +\\([A-Za-z0-9_]*\\)")
+             2)
+       (list "Actions"
+	     (concat "^ *"
+		     opt-name-annotation-regex
+		     " *action +\\([A-Za-z0-9_]*\\)")
+	     2)
+       (list "Parsers"
+	     (concat "^ *"
+		     opt-name-annotation-regex
+		     " *parser +\\([A-Za-z0-9_]*\\)")
+	     2)
+       (list "Parser States"
+	     (concat "^ *"
+		     opt-name-annotation-regex
+		     " *state +\\([A-Za-z0-9_]*\\)")
+             2)
+       (list "Headers"
+	     (concat "^ *"
+		     opt-name-annotation-regex
+		     " *header +\\([A-Za-z0-9_]*\\)")
+	     2)
+       (list "Header Unions"
+	     (concat "^ *"
+		     opt-name-annotation-regex
+		     " *header_union +\\([A-Za-z0-9_]*\\)")
+	     2)
+       (list "Structs"
+	     (concat "^ *"
+		     opt-name-annotation-regex
+		     " *struct +\\([A-Za-z0-9_]*\\)")
+	     2)
+       ))
 
 ;;; Cscope Support
 (require 'xcscope)
