@@ -77,7 +77,7 @@ function is_windows() {
 function get_os() {
   local os
   local found_match=0
-  for os in osx ubuntu fedora rocky windows; do
+  for os in osx debian ubuntu fedora rocky windows; do
     is_$os; [[ $? == ${1:-0} ]] && echo $os && found_match=1
   done
   if [[ "$found_match" == 0 ]]
