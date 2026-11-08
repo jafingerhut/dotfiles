@@ -1,0 +1,38 @@
+# This is not really a cmake template, only some code snippets that
+# I have found useful in debugging what is going on in CMakeLists.txt files.
+
+# Define this function, then you can call it anywhere you want to
+# see the value of all cmake variables and their values.
+# Found here:
+# https://stackoverflow.com/questions/9298278/cmake-print-out-all-accessible-variables-in-a-script
+
+function(dump_cmake_variables)
+    get_cmake_property(_variableNames VARIABLES)
+    list (SORT _variableNames)
+    foreach (_variableName ${_variableNames})
+        message(STATUS "${_variableName}=${${_variableName}}")
+    endforeach()
+endfunction()
+
+
+message(STATUS "jafdbg begin gothere #1 ...")
+dump_cmake_variables()
+message(STATUS "jafdbg end gothere #1 ...")
+
+
+# Here is a fancier version that only prints the values of variables
+# whose names match a pattern, from the same source linked above:
+
+function(dump_cmake_variables)
+    get_cmake_property(_variableNames VARIABLES)
+    list (SORT _variableNames)
+    foreach (_variableName ${_variableNames})
+        if ((NOT DEFINED ARGV0) OR _variableName MATCHES ${ARGV0})
+            message(STATUS "${_variableName}=${${_variableName}}")
+        endif()
+    endforeach()
+endfunction()
+
+# To print environment variables, use CMake's command mode:
+
+execute_process(COMMAND "${CMAKE_COMMAND}" "-E" "environment")
