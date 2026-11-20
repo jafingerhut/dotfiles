@@ -7,6 +7,14 @@
 # e.g. 30 to 35 minutes on a 2023 model M3 MacBook Pro for a directory
 # with total size about 8 GBytes.
 
+if ! command -v xz >/dev/null 2>&1; then
+    1>&2 echo "No command 'xz' found in command path."
+    1>&2 echo "Some ways to install it:"
+    1>&2 echo "    Homebrew: brew install xz"
+    1>&2 echo "    Debian-based systems, e.g. Ubuntu: sudo apt-get install xz-utils"
+    exit 1
+fi
+
 if [[ $# -lt 1 ]]
 then
     1>&2 echo "Usage: $0 <file_or_directory>"
