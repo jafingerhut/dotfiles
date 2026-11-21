@@ -13,4 +13,4 @@ sudo mount -t virtiofs share $HOME/shared
 # Make them accessible after the system reboots, automatically during
 # each bootup.
 
-echo share  $HOME/shared  virtiofs  rw,nofail  0  0 | tee -a /etc/fstab
+echo share  $HOME/shared  virtiofs  rw,nofail  0  0 | sudo tee -a /etc/fstab
