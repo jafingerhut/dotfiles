@@ -52,6 +52,8 @@ packages=(
 #  mate-terminal
 #  silversearcher-ag
 #  sshfs
+  ncdu
+  pax-utils
   synaptic
 #  telnet
   tree
@@ -103,9 +105,10 @@ packages=($(setdiff "${packages[*]}" "$(dpkg --get-selections | grep -v deinstal
 
 if (( ${#packages[@]} > 0 )); then
   e_header "Installing APT packages: ${packages[*]}"
-  for package in "${packages[@]}"; do
-    sudo apt-get -qq install "$package"
-  done
+#  for package in "${packages[@]}"; do
+#    sudo apt-get -qq install "$package"
+#  done
+    sudo apt-get -qq install "$packages[@]"
 fi
 
 # Install Git Extras
