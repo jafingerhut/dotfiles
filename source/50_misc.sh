@@ -27,7 +27,10 @@ function titlebar() {
 # I'm used to tcsh 'where' to learn the info that bash 'type -a' prints
 alias where='type -a'
 
-alias ldd='otool -L'
+if is_osx; then
+    #echo "Detected osx.  Creating alias for ldd -> otool"
+    alias ldd='otool -L'
+fi
 
 # fwf - find writable files
 alias fwf='find . \! -type d -a -perm -200 -ls'
